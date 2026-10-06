@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Faris & Maisura</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f7f2ec;
+            color: #4b3b32;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: auto;
+            background: white;
+            padding: 35px 25px;
+            border-radius: 20px;
+        }
+
+        h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            line-height: 1.6;
+        }
+
+        input {
+            margin: 25px 0;
+        }
+
+        button {
+            background: #6b5548;
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 30px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:disabled {
+            opacity: 0.5;
+        }
+
+        #status {
+            margin-top: 20px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Faris & Maisura</h1>
+
+    <h2>Share a Moment 🤍</h2>
+
+    <p>
+        Capture a little moment from our special day
+        and share it with us.
+    </p>
+
+    <input
+        type="file"
+        id="photo"
+        accept="image/*"
+    >
+
+    <br>
+
+    <button id="uploadButton">
+        Upload Photo
+    </button>
+
+    <div id="status"></div>
+
+</div>
+
+<script>
+
+const SUPABASE_URL = "https://bifsngoytsdmbslzmkyo.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+"sb_publishable_v7LqDPohz2SdwOgWikvspg_9Zswa7xn";
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY
+    );
+
+
+const uploadButton =
+    document.getElementById("uploadButton");
+
+const photoInput =
+    document.getElementById("photo");
+
+const status =
+    document.getElementById("status");
+
+
+uploadButton.addEventListener("click", async () => {
+
+    const file = photoInput.files[0];
+
+    if (!file) {
+        status.textContent = "Please choose a photo";
+        return;
+    }
+
+    uploadButton.disabled = true;
+
+    status.textContent = "Uploading...";
+
+
+    const fileName =
+        Date.now() + "-" +
+        Math.random().toString(36).substring(2) +
+        "-" +
+        file.name;
+
+
+    const { data, error } =
+        await supabaseClient
+            .storage
+            .from("wedding-photos")
+            .upload(fileName, file);
+
+
+    if (error) {
+
+        console.error(error);
+
+        status.textContent =
+            "Upload failed: " + error.message;
+
+        uploadButton.disabled = false;
+
+        return;
+    }
+
+
+    status.textContent =
+        "Photo uploaded successfully 🤍";
+
+    photoInput.value = "";
+
+    uploadButton.disabled = false;
+
+});
+
+</script>
+
+</body>
+</html>
