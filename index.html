@@ -770,8 +770,31 @@ uploadButton.addEventListener(
 loadGallery();
 
 
-</script>
+const showMoreButton =
+    document.getElementById("showMoreButton");
 
+showMoreButton.addEventListener(
+    "click",
+    () => {
+
+        const hiddenPhotos =
+            gallery.querySelectorAll(
+                ".hidden-photo"
+            );
+
+        hiddenPhotos.forEach(photo => {
+            photo.classList.remove(
+                "hidden-photo"
+            );
+        });
+
+        showMoreButton.style.display =
+            "none";
+    }
+);
+
+
+</script>
 
 </body>
 
