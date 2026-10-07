@@ -681,8 +681,8 @@ uploadButton.addEventListener(
     "click",
     async () => {
 
-        const file =
-            photoInput.files[0];
+        const files =
+    Array.from(photoInput.files);
 
 
         if (!file) {
