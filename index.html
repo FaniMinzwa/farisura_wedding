@@ -332,4 +332,585 @@
         class="photo-counter"
     >
         1 / 1
+    </div>
+
+
+    <button
+        id="previousButton"
+        class="nav-button previous-button"
+        aria-label="Previous photo"
+    >
+        ‹
+    </button>
+
+
+    <img
+        id="lightboxImage"
+        class="lightbox-content"
+        alt="Wedding photo"
+    >
+
+
+    <button
+        id="nextButton"
+        class="nav-button next-button"
+        aria-label="Next photo"
+    >
+        ›
+    </button>
+
+
+    <a
+        id="downloadButton"
+        class="download-button"
+        href="#"
+        download
+    >
+        ↓ Save Photo
+    </a>
+
+</div>
+
+
+
+<script>
+
+
+const SUPABASE_URL =
+    "https://bifsngoytsdmbslzmkyo.supabase.co";
+
+
+const SUPABASE_PUBLISHABLE_KEY =
+    "sb_publishable_v7LqDPohz2SdwOgWikvspg_9Zswa7xn";
+
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY
+    );
+
+
+
+const uploadButton =
+    document.getElementById("uploadButton");
+
+
+const photoInput =
+    document.getElementById("photo");
+
+
+const status =
+    document.getElementById("status");
+
+
+const gallery =
+    document.getElementById("gallery");
+
+
+const lightbox =
+    document.getElementById("lightbox");
+
+
+const lightboxImage =
+    document.getElementById("lightboxImage");
+
+
+const closeButton =
+    document.getElementById("closeButton");
+
+
+const downloadButton =
+    document.getElementById("downloadButton");
+
+
+const previousButton =
+    document.getElementById("previousButton");
+
+
+const nextButton =
+    document.getElementById("nextButton");
+
+
+const photoCounter =
+    document.getElementById("photoCounter");
+
+
+
+/* STORE ALL GALLERY PHOTOS */
+
+let galleryPhotos = [];
+
+let currentPhotoIndex = 0;
+
+
+
+/* LOAD GALLERY */
+
+async function loadGallery() {
+
+    gallery.innerHTML = "";
+
+    galleryPhotos = [];
+
+
+    const { data, error } =
+        await supabaseClient
+            .storage
+            .from("wedding-photos")
+            .list("", {
+                limit: 100,
+                sortBy: {
+                    column: "created_at",
+                    order: "desc"
+                }
+            });
+
+
+    if (error) {
+
+        console.error(error);
+
+        gallery.innerHTML =
+            "<p>Unable to load gallery.</p>";
+
+        return;
+    }
+
+
+    data.forEach(file => {
+
+        if (!file.name) return;
+
+
+        const {
+            data: publicUrlData
+        } =
+            supabaseClient
+                .storage
+                .from("wedding-photos")
+                .getPublicUrl(file.name);
+
+
+        galleryPhotos.push({
+
+            name: file.name,
+
+            url: publicUrlData.publicUrl
+
+        });
+
+
+    });
+
+
+    galleryPhotos.forEach(
+        (photo, index) => {
+
+            const img =
+                document.createElement("img");
+
+
+            img.src =
+                photo.url;
+
+
+            img.loading =
+                "lazy";
+
+
+            img.addEventListener(
+                "click",
+                () => {
+
+                    openLightbox(index);
+
+                }
+            );
+
+
+            gallery.appendChild(img);
+
+        }
+    );
+
+}
+
+
+
+/* OPEN PHOTO VIEWER */
+
+function openLightbox(index) {
+
+    if (
+        galleryPhotos.length === 0
+    ) {
+
+        return;
+
+    }
+
+
+    currentPhotoIndex =
+        index;
+
+
+    updateLightbox();
+
+
+    lightbox.classList.add(
+        "active"
+    );
+
+}
+
+
+
+/* UPDATE CURRENT PHOTO */
+
+function updateLightbox() {
+
+    const photo =
+        galleryPhotos[
+            currentPhotoIndex
+        ];
+
+
+    if (!photo) return;
+
+
+    lightboxImage.src =
+        photo.url;
+
+
+    downloadButton.href =
+        photo.url;
+
+
+    downloadButton.download =
+        photo.name;
+
+
+    photoCounter.textContent =
+        (currentPhotoIndex + 1) +
+        " / " +
+        galleryPhotos.length;
+
+}
+
+
+
+/* NEXT PHOTO */
+
+function nextPhoto() {
+
+    if (
+        galleryPhotos.length === 0
+    ) {
+
+        return;
+
+    }
+
+
+    currentPhotoIndex =
+        (
+            currentPhotoIndex + 1
+        ) %
+        galleryPhotos.length;
+
+
+    updateLightbox();
+
+}
+
+
+
+/* PREVIOUS PHOTO */
+
+function previousPhoto() {
+
+    if (
+        galleryPhotos.length === 0
+    ) {
+
+        return;
+
+    }
+
+
+    currentPhotoIndex =
+        (
+            currentPhotoIndex -
+            1 +
+            galleryPhotos.length
+        ) %
+        galleryPhotos.length;
+
+
+    updateLightbox();
+
+}
+
+
+
+/* CLOSE VIEWER */
+
+function closeLightbox() {
+
+    lightbox.classList.remove(
+        "active"
+    );
+
+    lightboxImage.src = "";
+
+}
+
+
+
+/* BUTTONS */
+
+closeButton.addEventListener(
+    "click",
+    closeLightbox
+);
+
+
+nextButton.addEventListener(
+    "click",
+    nextPhoto
+);
+
+
+previousButton.addEventListener(
+    "click",
+    previousPhoto
+);
+
+
+
+/* CLICK OUTSIDE PHOTO TO CLOSE */
+
+lightbox.addEventListener(
+    "click",
+    (event) => {
+
+        if (
+            event.target === lightbox
+        ) {
+
+            closeLightbox();
+
+        }
+
+    }
+);
+
+
+
+/* KEYBOARD CONTROLS */
+
+document.addEventListener(
+    "keydown",
+    (event) => {
+
+        if (
+            !lightbox.classList.contains(
+                "active"
+            )
+        ) {
+
+            return;
+
+        }
+
+
+        if (
+            event.key === "Escape"
+        ) {
+
+            closeLightbox();
+
+        }
+
+
+        if (
+            event.key === "ArrowRight"
+        ) {
+
+            nextPhoto();
+
+        }
+
+
+        if (
+            event.key === "ArrowLeft"
+        ) {
+
+            previousPhoto();
+
+        }
+
+    }
+);
+
+
+
+/* SWIPE CONTROLS */
+
+let touchStartX = 0;
+
+let touchEndX = 0;
+
+
+
+lightbox.addEventListener(
+    "touchstart",
+    (event) => {
+
+        touchStartX =
+            event.changedTouches[0].screenX;
+
+    },
+    { passive: true }
+);
+
+
+
+lightbox.addEventListener(
+    "touchend",
+    (event) => {
+
+        touchEndX =
+            event.changedTouches[0].screenX;
+
+
+        const swipeDistance =
+            touchEndX -
+            touchStartX;
+
+
+        if (
+            Math.abs(swipeDistance) <
+            50
+        ) {
+
+            return;
+
+        }
+
+
+        if (
+            swipeDistance < 0
+        ) {
+
+            nextPhoto();
+
+        } else {
+
+            previousPhoto();
+
+        }
+
+    },
+    { passive: true }
+);
+
+
+
+/* UPLOAD PHOTO */
+
+uploadButton.addEventListener(
+    "click",
+    async () => {
+
+        const file =
+            photoInput.files[0];
+
+
+        if (!file) {
+
+            status.textContent =
+                "Please choose a photo first.";
+
+            return;
+
+        }
+
+
+        uploadButton.disabled =
+            true;
+
+
+        status.textContent =
+            "Uploading...";
+
+
+        const fileName =
+            Date.now() +
+            "-" +
+            Math.random()
+                .toString(36)
+                .substring(2) +
+            "-" +
+            file.name;
+
+
+        const { error } =
+            await supabaseClient
+                .storage
+                .from("wedding-photos")
+                .upload(
+                    fileName,
+                    file
+                );
+
+
+        if (error) {
+
+            console.error(error);
+
+            status.textContent =
+                "Upload failed: " +
+                error.message;
+
+
+            uploadButton.disabled =
+                false;
+
+
+            return;
+
+        }
+
+
+        status.textContent =
+            "Photo uploaded successfully 🤍";
+
+
+        photoInput.value = "";
+
+
+        uploadButton.disabled =
+            false;
+
+
+        await loadGallery();
+
+    }
+);
+
+
+
+/* INITIAL LOAD */
+
+loadGallery();
+
+
+</script>
+
+
+</body>
+
+</html>
 ```
