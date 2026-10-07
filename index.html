@@ -281,6 +281,51 @@
     ↓
     <span>See Other Photos</span>
 </button>
+    <section class="wishes-section">
+
+    <h2 class="gallery-title">
+        Leave a Little Wish
+    </h2>
+
+    <p class="wishes-intro">
+        Leave a little note for Faris & Maisura 🤍
+    </p>
+
+    <form id="wishForm">
+
+        <input
+            type="text"
+            id="wishName"
+            placeholder="Your name (optional)"
+        >
+
+        <label class="anonymous-option">
+            <input
+                type="checkbox"
+                id="anonymousWish"
+            >
+            Send anonymously
+        </label>
+
+        <textarea
+            id="wishMessage"
+            placeholder="Write your wish here..."
+            rows="5"
+            required
+        ></textarea>
+
+        <button
+            type="submit"
+            id="wishSubmitButton"
+        >
+            Send Wish
+        </button>
+
+        <p id="wishStatus"></p>
+
+    </form>
+
+</section>
 
 
 </div>
@@ -795,8 +840,84 @@ showMoreButton.addEventListener(
     }
 );
 
-</script>
 
+/* WISHES */
+
+const wishForm =
+    document.getElementById("wishForm");
+
+const wishName =
+    document.getElementById("wishName");
+
+const anonymousWish =
+    document.getElementById("anonymousWish");
+
+const wishMessage =
+    document.getElementById("wishMessage");
+
+const wishSubmitButton =
+    document.getElementById("wishSubmitButton");
+
+const wishStatus =
+    document.getElementById("wishStatus");
+
+
+wishForm.addEventListener(
+    "submit",
+    async (event) => {
+
+        event.preventDefault();
+
+        wishSubmitButton.disabled = true;
+
+        wishStatus.textContent =
+            "Sending your wish...";
+
+        const name =
+            anonymousWish.checked
+                ? "Anonymous"
+                : wishName.value.trim();
+
+        const message =
+            wishMessage.value.trim();
+
+        const { error } =
+            await supabaseClient
+                .from("wishes")
+                .insert([
+                    {
+                        name:
+                            name || "Anonymous",
+                        message:
+                            message
+                    }
+                ]);
+
+        if (error) {
+
+            console.error(error);
+
+            wishStatus.textContent =
+                "Something went wrong. Please try again.";
+
+            wishSubmitButton.disabled =
+                false;
+
+            return;
+        }
+
+        wishStatus.textContent =
+            "Your wish has been sent 🤍";
+
+        wishForm.reset();
+
+        wishSubmitButton.disabled =
+            false;
+
+    }
+);
+
+</script>
 </body>
 
 </html>
