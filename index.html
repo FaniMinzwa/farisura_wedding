@@ -777,22 +777,23 @@ showMoreButton.addEventListener(
     "click",
     () => {
 
-        const hiddenPhotos =
+        const extraPhotos =
             gallery.querySelectorAll(
-                ".hidden-photo"
+                "img"
             );
 
-        hiddenPhotos.forEach(photo => {
-            photo.classList.remove(
-                "hidden-photo"
-            );
+        extraPhotos.forEach((photo, index) => {
+
+            if (index >= 8) {
+                photo.style.display = "block";
+            }
+
         });
 
         showMoreButton.style.display =
             "none";
     }
 );
-
 
 </script>
 
