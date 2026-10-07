@@ -702,7 +702,16 @@ uploadButton.addEventListener(
             "Uploading...";
 
 
-        for (const file of files) {
+        for (let i = 0; i < files.length; i++) {
+
+    const file = files[i];
+
+    status.textContent =
+        "Uploading " +
+        (i + 1) +
+        " of " +
+        files.length +
+        "...";
 
     const fileName =
         Date.now() +
@@ -721,6 +730,36 @@ uploadButton.addEventListener(
                 fileName,
                 file
             );
+
+    if (error) {
+
+        console.error(error);
+
+        status.textContent =
+            "Upload failed: " +
+            error.message;
+
+        uploadButton.disabled =
+            false;
+
+        return;
+    }
+}
+
+
+status.textContent =
+    files.length +
+    " photo" +
+    (files.length === 1 ? "" : "s") +
+    " uploaded successfully 🤍";
+
+uploadButton.disabled =
+    false;
+
+photoInput.value =
+    "";
+
+loadGallery();
 
     if (error) {
 
