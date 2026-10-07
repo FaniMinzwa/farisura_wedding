@@ -702,24 +702,40 @@ uploadButton.addEventListener(
             "Uploading...";
 
 
-        const fileName =
-            Date.now() +
-            "-" +
-            Math.random()
-                .toString(36)
-                .substring(2) +
-            "-" +
-            file.name;
+        for (const file of files) {
 
+    const fileName =
+        Date.now() +
+        "-" +
+        Math.random()
+            .toString(36)
+            .substring(2) +
+        "-" +
+        file.name;
 
-        const { error } =
-            await supabaseClient
-                .storage
-                .from("wedding-photos")
-                .upload(
-                    fileName,
-                    file
-                );
+    const { error } =
+        await supabaseClient
+            .storage
+            .from("wedding-photos")
+            .upload(
+                fileName,
+                file
+            );
+
+    if (error) {
+
+        console.error(error);
+
+        status.textContent =
+            "Upload failed: " +
+            error.message;
+
+        uploadButton.disabled =
+            false;
+
+        return;
+    }
+}
 
 
         if (error) {
