@@ -685,14 +685,14 @@ uploadButton.addEventListener(
     Array.from(photoInput.files);
 
 
-        if (!file) {
+        if (!files.length) {
 
-            status.textContent =
-                "Please choose a photo first.";
+    status.textContent =
+        "Please choose at least one photo.";
 
-            return;
+    return;
 
-        }
+}
 
 
         uploadButton.disabled = true;
