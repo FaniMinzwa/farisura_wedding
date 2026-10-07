@@ -379,7 +379,17 @@ const closeButton =
 
 const downloadButton =
     document.getElementById("downloadButton");
+const prevButton =
+    document.getElementById("prevButton");
 
+const nextButton =
+    document.getElementById("nextButton");
+
+const photoCounter =
+    document.getElementById("photoCounter");
+
+let galleryPhotos = [];
+let currentPhotoIndex = 0;
 
 
 async function loadGallery() {
@@ -409,7 +419,7 @@ async function loadGallery() {
         return;
     }
 
-
+galleryPhotos = data.filter(file => file.name);
     data.forEach(file => {
 
         if (!file.name) return;
@@ -436,22 +446,22 @@ async function loadGallery() {
 
 
         img.addEventListener(
-            "click",
-            () => {
+    "click",
+    () => {
 
-                lightboxImage.src =
-                    publicUrlData.publicUrl;
+        currentPhotoIndex =
+            galleryPhotos.findIndex(
+                photo => photo.name === file.name
+            );
 
-                downloadButton.href =
-                    publicUrlData.publicUrl;
+        showPhoto(currentPhotoIndex);
 
-                downloadButton.download =
-                    file.name;
-
-                lightbox.classList.add("active");
-
-            }
+        lightbox.classList.add(
+            "active"
         );
+
+    }
+);
 
 
         gallery.appendChild(img);
@@ -461,7 +471,44 @@ async function loadGallery() {
 }
 
 
+function showPhoto(index) {
 
+    if (!galleryPhotos.length) return;
+
+    if (index < 0) {
+        index = galleryPhotos.length - 1;
+    }
+
+    if (index >= galleryPhotos.length) {
+        index = 0;
+    }
+
+    currentPhotoIndex = index;
+
+    const file = galleryPhotos[currentPhotoIndex];
+
+    const {
+        data: publicUrlData
+    } =
+        supabaseClient
+            .storage
+            .from("wedding-photos")
+            .getPublicUrl(file.name);
+
+    lightboxImage.src =
+        publicUrlData.publicUrl;
+
+    downloadButton.href =
+        publicUrlData.publicUrl;
+
+    downloadButton.download =
+        file.name;
+
+    photoCounter.textContent =
+        (currentPhotoIndex + 1) +
+        " / " +
+        galleryPhotos.length;
+}
 function closeLightbox() {
 
     lightbox.classList.remove("active");
@@ -476,7 +523,19 @@ closeButton.addEventListener(
     "click",
     closeLightbox
 );
+prevButton.addEventListener(
+    "click",
+    () => {
+        showPhoto(currentPhotoIndex - 1);
+    }
+);
 
+nextButton.addEventListener(
+    "click",
+    () => {
+        showPhoto(currentPhotoIndex + 1);
+    }
+);
 
 
 lightbox.addEventListener(
