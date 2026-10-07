@@ -319,14 +319,13 @@
     >
 
 
-    <a
-        id="downloadButton"
-        class="download-button"
-        href="#"
-        download
-    >
-        ↓ Save Photo
-    </a>
+    <button
+    id="downloadButton"
+    class="download-button"
+    type="button"
+>
+    ↓ Save Photo
+</button>
 
 </div>
 
@@ -498,11 +497,11 @@ function showPhoto(index) {
     lightboxImage.src =
         publicUrlData.publicUrl;
 
-    downloadButton.href =
-        publicUrlData.publicUrl;
+    downloadButton.dataset.url =
+    publicUrlData.publicUrl;
 
-    downloadButton.download =
-        file.name;
+downloadButton.dataset.filename =
+    file.name;
 
     photoCounter.textContent =
         (currentPhotoIndex + 1) +
@@ -546,7 +545,79 @@ lightbox.addEventListener(
     },
     { passive: true }
 );
+downloadButton.addEventListener(
+    "click",
+    async () => {
 
+        const url =
+            downloadButton.dataset.url;
+
+        const filename =
+            downloadButton.dataset.filename;
+
+        if (!url) return;
+
+        try {
+
+            const response =
+                await fetch(url);
+
+            const blob =
+                await response.blob();
+
+            const file =
+                new File(
+                    [blob],
+                    filename,
+                    {
+                        type: blob.type
+                    }
+                );
+
+            if (
+                navigator.share &&
+                navigator.canShare &&
+                navigator.canShare({
+                    files: [file]
+                })
+            ) {
+
+                await navigator.share({
+                    files: [file],
+                    title: "Wedding Photo"
+                });
+
+            } else {
+
+                const link =
+                    document.createElement("a");
+
+                link.href =
+                    URL.createObjectURL(blob);
+
+                link.download =
+                    filename;
+
+                document.body.appendChild(link);
+
+                link.click();
+
+                link.remove();
+
+                URL.revokeObjectURL(
+                    link.href
+                );
+
+            }
+
+        } catch (error) {
+
+            console.error(error);
+
+        }
+
+    }
+);
 lightbox.addEventListener(
     "touchend",
     (event) => {
