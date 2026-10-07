@@ -454,8 +454,8 @@ galleryPhotos = data.filter(file => file.name);
         "lazy";
 
     if (index >= 8) {
-        img.classList.add("hidden-photo");
-    }
+    img.style.display = "none";
+}
 
     img.addEventListener(
         "click",
