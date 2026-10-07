@@ -203,23 +203,26 @@
             font-weight: bold;
         }
 
-        @media (max-width: 600px) {
+        .hidden-photo {
+    display: none;
+}
 
-            .gallery {
-                grid-template-columns: repeat(2, 1fr);
-            }
+@media (max-width: 600px) {
 
-            h1 {
-                font-size: 30px;
-            }
+    .gallery {
+        grid-template-columns: repeat(2, 1fr);
+    }
 
-            .lightbox-content {
-                max-width: 96vw;
-                max-height: 78vh;
-            }
+    h1 {
+        font-size: 30px;
+    }
 
-        }
+    .lightbox-content {
+        max-width: 96vw;
+        max-height: 78vh;
+    }
 
+}
     </style>
 
 </head>
@@ -397,6 +400,9 @@ const nextButton =
 const photoCounter =
     document.getElementById("photoCounter");
 
+const showMoreButton =
+    document.getElementById("showMoreButton");
+
 let galleryPhotos = [];
 let currentPhotoIndex = 0;
 
@@ -429,53 +435,67 @@ async function loadGallery() {
     }
 
 galleryPhotos = data.filter(file => file.name);
-    data.slice(0, 8).forEach(file => {
+    data.forEach((file, index) => {
 
-        if (!file.name) return;
+    if (!file.name) return;
 
+    const {
+        data: publicUrlData
+    } =
+        supabaseClient
+            .storage
+            .from("wedding-photos")
+            .getPublicUrl(file.name);
 
-        const {
-            data: publicUrlData
-        } =
-            supabaseClient
-                .storage
-                .from("wedding-photos")
-                .getPublicUrl(file.name);
+    const img =
+        document.createElement("img");
 
+    img.src =
+        publicUrlData.publicUrl;
 
-        const img =
-            document.createElement("img");
+    img.loading =
+        "lazy";
 
+    if (index >= 8) {
+        img.classList.add("hidden-photo");
+    }
 
-        img.src =
-            publicUrlData.publicUrl;
+    img.addEventListener(
+        "click",
+        () => {
 
+            currentPhotoIndex =
+                galleryPhotos.findIndex(
+                    photo =>
+                        photo.name === file.name
+                );
 
-        img.loading = "lazy";
+            showPhoto(currentPhotoIndex);
 
-
-        img.addEventListener(
-    "click",
-    () => {
-
-        currentPhotoIndex =
-            galleryPhotos.findIndex(
-                photo => photo.name === file.name
+            lightbox.classList.add(
+                "active"
             );
+        }
+    );
 
-        showPhoto(currentPhotoIndex);
+    gallery.appendChild(img);
+});
+    showMoreButton.onclick = () => {
 
-        lightbox.classList.add(
-            "active"
+    const hiddenPhotos =
+        gallery.querySelectorAll(
+            ".hidden-photo"
         );
 
-    }
-);
-
-
-        gallery.appendChild(img);
-
+    hiddenPhotos.forEach(photo => {
+        photo.classList.remove(
+            "hidden-photo"
+        );
     });
+
+    showMoreButton.style.display =
+        "none";
+};
 
 }
 
