@@ -420,7 +420,7 @@ async function loadGallery() {
     }
 
 galleryPhotos = data.filter(file => file.name);
-    data.forEach(file => {
+    data.slice(0, 8).forEach(file => {
 
         if (!file.name) return;
 
