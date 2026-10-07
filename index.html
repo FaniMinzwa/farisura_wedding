@@ -246,6 +246,7 @@
             type="file"
             id="photo"
             accept="image/*"
+            multiple
         >
 
         <br>
@@ -680,18 +681,16 @@ uploadButton.addEventListener(
     "click",
     async () => {
 
-        const file =
-            photoInput.files[0];
+        const files =
+    Array.from(photoInput.files);
+if (!files.length) {
 
+    status.textContent =
+        "Please choose at least one photo.";
 
-        if (!file) {
+    return;
 
-            status.textContent =
-                "Please choose a photo first.";
-
-            return;
-
-        }
+}
 
 
         uploadButton.disabled = true;
@@ -701,25 +700,47 @@ uploadButton.addEventListener(
             "Uploading...";
 
 
-        const fileName =
-            Date.now() +
-            "-" +
-            Math.random()
-                .toString(36)
-                .substring(2) +
-            "-" +
-            file.name;
+        for (const file of files) {
 
+    status.textContent =
+        "Uploading " +
+        (files.indexOf(file) + 1) +
+        " of " +
+        files.length +
+        "...";
 
-        const { error } =
-            await supabaseClient
-                .storage
-                .from("wedding-photos")
-                .upload(
-                    fileName,
-                    file
-                );
+    const fileName =
+        Date.now() +
+        "-" +
+        Math.random()
+            .toString(36)
+            .substring(2) +
+        "-" +
+        file.name;
 
+    const { error } =
+        await supabaseClient
+            .storage
+            .from("wedding-photos")
+            .upload(
+                fileName,
+                file
+            );
+
+    if (error) {
+
+        console.error(error);
+
+        status.textContent =
+            "Upload failed: " +
+            error.message;
+
+        uploadButton.disabled =
+            false;
+
+        return;
+
+    }
 
         if (error) {
 
@@ -737,7 +758,10 @@ uploadButton.addEventListener(
 
 
         status.textContent =
-            "Photo uploaded successfully 🤍";
+    files.length +
+    " photo" +
+    (files.length === 1 ? "" : "s") +
+    " uploaded successfully 🤍";
 
 
         photoInput.value = "";
