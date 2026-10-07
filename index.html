@@ -98,4 +98,437 @@
             width: 100%;
             aspect-ratio: 1 / 1;
             object-fit: cover;
+            border-radius: 12px;
+            display: block;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .gallery img:hover {
+            transform: scale(1.02);
+        }
+
+        /* Full-screen photo viewer */
+
+        .lightbox {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.92);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox-content {
+            max-width: 95vw;
+            max-height: 85vh;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 18px;
+            right: 20px;
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            font-size: 28px;
+            padding: 0;
+        }
+
+        .download-button {
+            position: absolute;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            color: #4b3b32;
+            text-decoration: none;
+            padding: 13px 24px;
+            border-radius: 30px;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        @media (max-width: 600px) {
+
+            .gallery {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            h1 {
+                font-size: 30px;
+            }
+
+            .lightbox-content {
+                max-width: 96vw;
+                max-height: 78vh;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+    <h1>Faris & Maisura</h1>
+
+    <h2>Our Wedding Memories 🤍</h2>
+
+    <p class="intro">
+        Capture a little moment from our special day
+        and share it with us.
+    </p>
+
+
+    <div class="upload-box">
+
+        <input
+            type="file"
+            id="photo"
+            accept="image/*"
+        >
+
+        <br>
+
+        <button id="uploadButton">
+            Upload Photo
+        </button>
+
+        <div id="status"></div>
+
+    </div>
+
+
+    <h2 class="gallery-title">
+        Moments From Our Day
+    </h2>
+
+
+    <div
+        id="gallery"
+        class="gallery"
+    ></div>
+
+
+</div>
+
+
+<!-- Full-screen photo viewer -->
+
+<div
+    id="lightbox"
+    class="lightbox"
+>
+
+    <button
+        id="closeButton"
+        class="close-button"
+        aria-label="Close"
+    >
+        ×
+    </button>
+
+
+    <img
+        id="lightboxImage"
+        class="lightbox-content"
+        alt="Wedding photo"
+    >
+
+
+    <a
+        id="downloadButton"
+        class="download-button"
+        href="#"
+        download
+    >
+        ↓ Save Photo
+    </a>
+
+</div>
+
+
+<script>
+
+
+const SUPABASE_URL =
+    "https://bifsngoytsdmbslzmkyo.supabase.co";
+
+
+const SUPABASE_PUBLISHABLE_KEY =
+    "sb_publishable_v7LqDPohz2SdwOgWikvspg_9Zswa7xn";
+
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY
+    );
+
+
+const uploadButton =
+    document.getElementById("uploadButton");
+
+
+const photoInput =
+    document.getElementById("photo");
+
+
+const status =
+    document.getElementById("status");
+
+
+const gallery =
+    document.getElementById("gallery");
+
+
+const lightbox =
+    document.getElementById("lightbox");
+
+
+const lightboxImage =
+    document.getElementById("lightboxImage");
+
+
+const closeButton =
+    document.getElementById("closeButton");
+
+
+const downloadButton =
+    document.getElementById("downloadButton");
+
+
+
+async function loadGallery() {
+
+    gallery.innerHTML = "";
+
+    const { data, error } =
+        await supabaseClient
+            .storage
+            .from("wedding-photos")
+            .list("", {
+                limit: 100,
+                sortBy: {
+                    column: "created_at",
+                    order: "desc"
+                }
+            });
+
+
+    if (error) {
+
+        console.error(error);
+
+        gallery.innerHTML =
+            "<p>Unable to load gallery.</p>";
+
+        return;
+    }
+
+
+    data.forEach(file => {
+
+        if (!file.name) return;
+
+
+        const {
+            data: publicUrlData
+        } =
+            supabaseClient
+                .storage
+                .from("wedding-photos")
+                .getPublicUrl(file.name);
+
+
+        const img =
+            document.createElement("img");
+
+
+        img.src =
+            publicUrlData.publicUrl;
+
+
+        img.loading = "lazy";
+
+
+        img.addEventListener(
+            "click",
+            () => {
+
+                lightboxImage.src =
+                    publicUrlData.publicUrl;
+
+                downloadButton.href =
+                    publicUrlData.publicUrl;
+
+                downloadButton.download =
+                    file.name;
+
+                lightbox.classList.add("active");
+
+            }
+        );
+
+
+        gallery.appendChild(img);
+
+    });
+
+}
+
+
+
+function closeLightbox() {
+
+    lightbox.classList.remove("active");
+
+    lightboxImage.src = "";
+
+}
+
+
+
+closeButton.addEventListener(
+    "click",
+    closeLightbox
+);
+
+
+
+lightbox.addEventListener(
+    "click",
+    (event) => {
+
+        if (
+            event.target === lightbox
+        ) {
+
+            closeLightbox();
+
+        }
+
+    }
+);
+
+
+
+document.addEventListener(
+    "keydown",
+    (event) => {
+
+        if (
+            event.key === "Escape"
+        ) {
+
+            closeLightbox();
+
+        }
+
+    }
+);
+
+
+
+uploadButton.addEventListener(
+    "click",
+    async () => {
+
+        const file =
+            photoInput.files[0];
+
+
+        if (!file) {
+
+            status.textContent =
+                "Please choose a photo first.";
+
+            return;
+
+        }
+
+
+        uploadButton.disabled = true;
+
+
+        status.textContent =
+            "Uploading...";
+
+
+        const fileName =
+            Date.now() +
+            "-" +
+            Math.random()
+                .toString(36)
+                .substring(2) +
+            "-" +
+            file.name;
+
+
+        const { error } =
+            await supabaseClient
+                .storage
+                .from("wedding-photos")
+                .upload(
+                    fileName,
+                    file
+                );
+
+
+        if (error) {
+
+            console.error(error);
+
+            status.textContent =
+                "Upload failed: " +
+                error.message;
+
+            uploadButton.disabled = false;
+
+            return;
+
+        }
+
+
+        status.textContent =
+            "Photo uploaded successfully 🤍";
+
+
+        photoInput.value = "";
+
+
+        uploadButton.disabled = false;
+
+
+        await loadGallery();
+
+    }
+);
+
+
+loadGallery();
+
+
+</script>
+
+
+</body>
+
+</html>
 ```
