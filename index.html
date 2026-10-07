@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 
@@ -99,6 +100,63 @@
             object-fit: cover;
             border-radius: 12px;
             display: block;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .gallery img:hover {
+            transform: scale(1.02);
+        }
+
+        /* Full-screen photo viewer */
+
+        .lightbox {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.92);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox-content {
+            max-width: 95vw;
+            max-height: 85vh;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 18px;
+            right: 20px;
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            font-size: 28px;
+            padding: 0;
+        }
+
+        .download-button {
+            position: absolute;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            color: #4b3b32;
+            text-decoration: none;
+            padding: 13px 24px;
+            border-radius: 30px;
+            font-size: 15px;
+            font-weight: bold;
         }
 
         @media (max-width: 600px) {
@@ -109,6 +167,11 @@
 
             h1 {
                 font-size: 30px;
+            }
+
+            .lightbox-content {
+                max-width: 96vw;
+                max-height: 78vh;
             }
 
         }
@@ -166,6 +229,41 @@
 </div>
 
 
+<!-- Full-screen photo viewer -->
+
+<div
+    id="lightbox"
+    class="lightbox"
+>
+
+    <button
+        id="closeButton"
+        class="close-button"
+        aria-label="Close"
+    >
+        ×
+    </button>
+
+
+    <img
+        id="lightboxImage"
+        class="lightbox-content"
+        alt="Wedding photo"
+    >
+
+
+    <a
+        id="downloadButton"
+        class="download-button"
+        href="#"
+        download
+    >
+        ↓ Save Photo
+    </a>
+
+</div>
+
+
 <script>
 
 
@@ -198,6 +296,22 @@ const status =
 
 const gallery =
     document.getElementById("gallery");
+
+
+const lightbox =
+    document.getElementById("lightbox");
+
+
+const lightboxImage =
+    document.getElementById("lightboxImage");
+
+
+const closeButton =
+    document.getElementById("closeButton");
+
+
+const downloadButton =
+    document.getElementById("downloadButton");
 
 
 
@@ -254,11 +368,81 @@ async function loadGallery() {
         img.loading = "lazy";
 
 
+        img.addEventListener(
+            "click",
+            () => {
+
+                lightboxImage.src =
+                    publicUrlData.publicUrl;
+
+                downloadButton.href =
+                    publicUrlData.publicUrl;
+
+                downloadButton.download =
+                    file.name;
+
+                lightbox.classList.add("active");
+
+            }
+        );
+
+
         gallery.appendChild(img);
 
     });
 
 }
+
+
+
+function closeLightbox() {
+
+    lightbox.classList.remove("active");
+
+    lightboxImage.src = "";
+
+}
+
+
+
+closeButton.addEventListener(
+    "click",
+    closeLightbox
+);
+
+
+
+lightbox.addEventListener(
+    "click",
+    (event) => {
+
+        if (
+            event.target === lightbox
+        ) {
+
+            closeLightbox();
+
+        }
+
+    }
+);
+
+
+
+document.addEventListener(
+    "keydown",
+    (event) => {
+
+        if (
+            event.key === "Escape"
+        ) {
+
+            closeLightbox();
+
+        }
+
+    }
+);
 
 
 
@@ -347,3 +531,4 @@ loadGallery();
 </body>
 
 </html>
+```
