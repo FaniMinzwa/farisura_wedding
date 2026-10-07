@@ -682,127 +682,76 @@ uploadButton.addEventListener(
     async () => {
 
         const files =
-    Array.from(photoInput.files);
-
+            Array.from(photoInput.files);
 
         if (!files.length) {
 
-    status.textContent =
-        "Please choose at least one photo.";
-
-    return;
-
-}
-
-
-        uploadButton.disabled = true;
-
-
-        status.textContent =
-            "Uploading...";
-
-
-        for (let i = 0; i < files.length; i++) {
-
-    const file = files[i];
-
-    status.textContent =
-        "Uploading " +
-        (i + 1) +
-        " of " +
-        files.length +
-        "...";
-
-    const fileName =
-        Date.now() +
-        "-" +
-        Math.random()
-            .toString(36)
-            .substring(2) +
-        "-" +
-        file.name;
-
-    const { error } =
-        await supabaseClient
-            .storage
-            .from("wedding-photos")
-            .upload(
-                fileName,
-                file
-            );
-
-    if (error) {
-
-        console.error(error);
-
-        status.textContent =
-            "Upload failed: " +
-            error.message;
-
-        uploadButton.disabled =
-            false;
-
-        return;
-    }
-}
-
-
-status.textContent =
-    files.length +
-    " photo" +
-    (files.length === 1 ? "" : "s") +
-    " uploaded successfully 🤍";
-
-uploadButton.disabled =
-    false;
-
-photoInput.value =
-    "";
-
-loadGallery();
-
-    if (error) {
-
-        console.error(error);
-
-        status.textContent =
-            "Upload failed: " +
-            error.message;
-
-        uploadButton.disabled =
-            false;
-
-        return;
-    }
-}
-
-
-        if (error) {
-
-            console.error(error);
-
             status.textContent =
-                "Upload failed: " +
-                error.message;
-
-            uploadButton.disabled = false;
+                "Please choose at least one photo.";
 
             return;
 
         }
 
+        uploadButton.disabled = true;
+
+        for (let i = 0; i < files.length; i++) {
+
+            const file = files[i];
+
+            status.textContent =
+                "Uploading " +
+                (i + 1) +
+                " of " +
+                files.length +
+                "...";
+
+            const fileName =
+                Date.now() +
+                "-" +
+                Math.random()
+                    .toString(36)
+                    .substring(2) +
+                "-" +
+                file.name;
+
+            const { error } =
+                await supabaseClient
+                    .storage
+                    .from("wedding-photos")
+                    .upload(
+                        fileName,
+                        file
+                    );
+
+            if (error) {
+
+                console.error(error);
+
+                status.textContent =
+                    "Upload failed: " +
+                    error.message;
+
+                uploadButton.disabled =
+                    false;
+
+                return;
+            }
+        }
 
         status.textContent =
-            "Photo uploaded successfully 🤍";
+            files.length +
+            " photo" +
+            (files.length === 1 ? "" : "s") +
+            " uploaded successfully 🤍";
 
+        uploadButton.disabled =
+            false;
 
-        photoInput.value = "";
+        photoInput.value =
+            "";
 
-
-        uploadButton.disabled = false;
-
-
-        await loadGallery();
+                await loadGallery();
 
     }
 );
@@ -817,4 +766,3 @@ loadGallery();
 </body>
 
 </html>
-```
