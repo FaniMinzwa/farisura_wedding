@@ -400,9 +400,6 @@ const nextButton =
 const photoCounter =
     document.getElementById("photoCounter");
 
-const showMoreButton =
-    document.getElementById("showMoreButton");
-
 let galleryPhotos = [];
 let currentPhotoIndex = 0;
 
@@ -480,22 +477,7 @@ galleryPhotos = data.filter(file => file.name);
 
     gallery.appendChild(img);
 });
-    showMoreButton.onclick = () => {
 
-    const hiddenPhotos =
-        gallery.querySelectorAll(
-            ".hidden-photo"
-        );
-
-    hiddenPhotos.forEach(photo => {
-        photo.classList.remove(
-            "hidden-photo"
-        );
-    });
-
-    showMoreButton.style.display =
-        "none";
-};
 
 }
 
