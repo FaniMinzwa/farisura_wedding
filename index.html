@@ -958,18 +958,6 @@ uploadButton.addEventListener(
 );
 
 
-const cancelUpload =
-    document.getElementById("cancelUpload");
-
-const confirmUpload =
-    document.getElementById("confirmUpload");
-
-const uploadConfirmation =
-    document.getElementById(
-        "uploadConfirmation"
-    );
-
-
 cancelUpload.addEventListener(
     "click",
     () => {
@@ -999,6 +987,8 @@ confirmUpload.addEventListener(
 
         uploadButton.disabled = true;
         confirmUpload.disabled = true;
+
+        lastUploadedFiles = [];
 
         for (let i = 0; i < files.length; i++) {
 
@@ -1045,6 +1035,10 @@ confirmUpload.addEventListener(
 
                 return;
             }
+
+            lastUploadedFiles.push(
+                fileName
+            );
         }
 
         status.textContent =
@@ -1052,6 +1046,10 @@ confirmUpload.addEventListener(
             " photo" +
             (files.length === 1 ? "" : "s") +
             " uploaded successfully 🤍";
+
+        undoUpload.classList.add(
+            "active"
+        );
 
         uploadButton.disabled =
             false;
@@ -1067,6 +1065,72 @@ confirmUpload.addEventListener(
     }
 );
 
+
+undoUpload.addEventListener(
+    "click",
+    async () => {
+
+        if (!lastUploadedFiles.length) {
+            return;
+        }
+
+        const confirmed =
+            window.confirm(
+                "Remove these uploaded photos?"
+            );
+
+        if (!confirmed) {
+            return;
+        }
+
+        undoUpload.disabled = true;
+
+        status.textContent =
+            "Removing uploaded photos...";
+
+        for (
+            const fileName
+            of lastUploadedFiles
+        ) {
+
+            const { error } =
+                await supabaseClient
+                    .storage
+                    .from("wedding-photos")
+                    .remove([
+                        fileName
+                    ]);
+
+            if (error) {
+
+                console.error(error);
+
+                status.textContent =
+                    "Unable to remove photo.";
+
+                undoUpload.disabled =
+                    false;
+
+                return;
+            }
+        }
+
+        lastUploadedFiles = [];
+
+        undoUpload.classList.remove(
+            "active"
+        );
+
+        undoUpload.disabled =
+            false;
+
+        status.textContent =
+            "Upload removed.";
+
+        await loadGallery();
+
+    }
+);
 
 loadGallery();
 
