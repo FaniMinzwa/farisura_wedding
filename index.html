@@ -607,7 +607,10 @@ const supabaseClient =
 
 const uploadButton =
     document.getElementById("uploadButton");
+const undoUpload =
+    document.getElementById("undoUpload");
 
+let lastUploadedFiles = [];
 
 const photoInput =
     document.getElementById("photo");
