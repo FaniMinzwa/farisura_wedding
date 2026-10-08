@@ -303,6 +303,52 @@ button:hover {
 .wish-dot.active {
     background: #8c6f5d;
 }
+        .upload-confirmation {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    background: rgba(75, 59, 50, 0.45);
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.upload-confirmation.active {
+    display: flex;
+}
+
+.confirmation-box {
+    background: #fffdf9;
+    width: 100%;
+    max-width: 340px;
+    padding: 30px 25px;
+    border-radius: 22px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(75, 59, 50, 0.15);
+}
+
+.confirmation-box p {
+    margin: 0 0 25px;
+    font-size: 17px;
+    color: #5a4638;
+}
+
+.confirmation-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.confirmation-buttons button {
+    padding: 11px 22px;
+    font-size: 14px;
+}
+
+#cancelUpload {
+    background: #e8ddd4;
+    color: #5a4638;
+}
     </style>
 
 </head>
@@ -335,10 +381,43 @@ button:hover {
         <br>
 
         <button id="uploadButton">
-            Upload Photo
-        </button>
+    Upload Photo
+</button>
 
-        <div id="status"></div>
+<div id="status"></div>
+
+<div
+    id="uploadConfirmation"
+    class="upload-confirmation"
+>
+
+    <div class="confirmation-box">
+
+        <p>
+            Confirm to share photos?
+        </p>
+
+        <div class="confirmation-buttons">
+
+            <button
+                id="cancelUpload"
+                type="button"
+            >
+                Cancel
+            </button>
+
+            <button
+                id="confirmUpload"
+                type="button"
+            >
+                Confirm
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
 
     </div>
 
@@ -834,7 +913,7 @@ document.addEventListener(
 
 uploadButton.addEventListener(
     "click",
-    async () => {
+    () => {
 
         const files =
             Array.from(photoInput.files);
@@ -848,7 +927,55 @@ uploadButton.addEventListener(
 
         }
 
+        uploadConfirmation.classList.add(
+            "active"
+        );
+
+    }
+);
+
+
+const cancelUpload =
+    document.getElementById("cancelUpload");
+
+const confirmUpload =
+    document.getElementById("confirmUpload");
+
+const uploadConfirmation =
+    document.getElementById(
+        "uploadConfirmation"
+    );
+
+
+cancelUpload.addEventListener(
+    "click",
+    () => {
+
+        uploadConfirmation.classList.remove(
+            "active"
+        );
+
+    }
+);
+
+
+confirmUpload.addEventListener(
+    "click",
+    async () => {
+
+        uploadConfirmation.classList.remove(
+            "active"
+        );
+
+        const files =
+            Array.from(photoInput.files);
+
+        if (!files.length) {
+            return;
+        }
+
         uploadButton.disabled = true;
+        confirmUpload.disabled = true;
 
         for (let i = 0; i < files.length; i++) {
 
@@ -890,6 +1017,9 @@ uploadButton.addEventListener(
                 uploadButton.disabled =
                     false;
 
+                confirmUpload.disabled =
+                    false;
+
                 return;
             }
         }
@@ -903,17 +1033,19 @@ uploadButton.addEventListener(
         uploadButton.disabled =
             false;
 
+        confirmUpload.disabled =
+            false;
+
         photoInput.value =
             "";
 
-                await loadGallery();
+        await loadGallery();
 
     }
 );
 
 
 loadGallery();
-
 
 const showMoreButton =
     document.getElementById("showMoreButton");
