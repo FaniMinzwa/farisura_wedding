@@ -327,6 +327,26 @@
 
 </section>
 
+    <section class="wish-display-section">
+
+    <h2 class="gallery-title">
+        A Little Note For You
+    </h2>
+
+    <div id="wishCardContainer" class="wish-card-container">
+        <div class="wish-card">
+            <p class="wish-card-message">
+                Loading little notes... 🤍
+            </p>
+        </div>
+    </div>
+
+    <div
+        id="wishDots"
+        class="wish-dots"
+    ></div>
+
+</section>
 
 </div>
 
@@ -916,7 +936,96 @@ wishForm.addEventListener(
 
     }
 );
+/* DISPLAY WISHES */
 
+const wishCardContainer =
+    document.getElementById("wishCardContainer");
+
+const wishDots =
+    document.getElementById("wishDots");
+
+
+async function loadWishes() {
+
+    const { data, error } =
+        await supabaseClient
+            .from("wishes")
+            .select("*")
+            .order("created_at", {
+                ascending: true
+            });
+
+    if (error) {
+
+        console.error(error);
+
+        wishCardContainer.innerHTML =
+            `
+            <div class="wish-card">
+                <p class="wish-card-message">
+                    Unable to load wishes 🤍
+                </p>
+            </div>
+            `;
+
+        return;
+    }
+
+    if (!data || !data.length) {
+
+        wishCardContainer.innerHTML =
+            `
+            <div class="wish-card">
+                <p class="wish-card-message">
+                    Be the first to leave a little wish 🤍
+                </p>
+            </div>
+            `;
+
+        return;
+    }
+
+    wishCardContainer.innerHTML = "";
+    wishDots.innerHTML = "";
+
+    data.forEach((wish, index) => {
+
+        const card =
+            document.createElement("div");
+
+        card.className = "wish-card";
+
+        card.innerHTML =
+            `
+            <p class="wish-card-message">
+                ${wish.message}
+            </p>
+
+            <p class="wish-card-name">
+                — ${wish.name || "Anonymous"}
+            </p>
+            `;
+
+        wishCardContainer.appendChild(card);
+
+
+        const dot =
+            document.createElement("span");
+
+        dot.className = "wish-dot";
+
+        if (index === 0) {
+            dot.classList.add("active");
+        }
+
+        wishDots.appendChild(dot);
+
+    });
+
+}
+
+
+loadWishes();
 </script>
 </body>
 
