@@ -1000,6 +1000,10 @@ const wishCardContainer =
 const wishDots =
     document.getElementById("wishDots");
 
+let wishes = [];
+let currentWishIndex = 0;
+let wishAutoSlide;
+
 
 async function loadWishes() {
 
@@ -1041,10 +1045,12 @@ async function loadWishes() {
         return;
     }
 
+    wishes = data;
+
     wishCardContainer.innerHTML = "";
     wishDots.innerHTML = "";
 
-    data.forEach((wish, index) => {
+    wishes.forEach((wish, index) => {
 
         const card =
             document.createElement("div");
@@ -1070,15 +1076,150 @@ async function loadWishes() {
 
         dot.className = "wish-dot";
 
-        if (index === 0) {
-            dot.classList.add("active");
-        }
+        dot.addEventListener(
+            "click",
+            () => {
+                showWish(index);
+                restartWishAutoSlide();
+            }
+        );
 
         wishDots.appendChild(dot);
 
     });
 
+    showWish(0);
+
+    startWishAutoSlide();
+
 }
+
+
+function showWish(index) {
+
+    if (!wishes.length) return;
+
+    if (index < 0) {
+        index = wishes.length - 1;
+    }
+
+    if (index >= wishes.length) {
+        index = 0;
+    }
+
+    currentWishIndex = index;
+
+    const cards =
+        wishCardContainer.querySelectorAll(
+            ".wish-card"
+        );
+
+    const dots =
+        wishDots.querySelectorAll(
+            ".wish-dot"
+        );
+
+    cards.forEach((card, cardIndex) => {
+
+        card.style.display =
+            cardIndex === currentWishIndex
+                ? "flex"
+                : "none";
+
+    });
+
+    dots.forEach((dot, dotIndex) => {
+
+        dot.classList.toggle(
+            "active",
+            dotIndex === currentWishIndex
+        );
+
+    });
+
+}
+
+
+function startWishAutoSlide() {
+
+    clearInterval(wishAutoSlide);
+
+    wishAutoSlide =
+        setInterval(
+            () => {
+
+                showWish(
+                    currentWishIndex + 1
+                );
+
+            },
+            5500
+        );
+
+}
+
+
+function restartWishAutoSlide() {
+
+    startWishAutoSlide();
+
+}
+
+
+/* Swipe */
+
+let wishTouchStartX = 0;
+let wishTouchEndX = 0;
+
+
+wishCardContainer.addEventListener(
+    "touchstart",
+    (event) => {
+
+        wishTouchStartX =
+            event.changedTouches[0].screenX;
+
+    },
+    { passive: true }
+);
+
+
+wishCardContainer.addEventListener(
+    "touchend",
+    (event) => {
+
+        wishTouchEndX =
+            event.changedTouches[0].screenX;
+
+        const swipeDistance =
+            wishTouchEndX -
+            wishTouchStartX;
+
+        if (
+            Math.abs(swipeDistance) < 50
+        ) {
+            return;
+        }
+
+        if (swipeDistance < 0) {
+
+            showWish(
+                currentWishIndex + 1
+            );
+
+        } else {
+
+            showWish(
+                currentWishIndex - 1
+            );
+
+        }
+
+        restartWishAutoSlide();
+
+    },
+    { passive: true }
+);
 
 
 loadWishes();
