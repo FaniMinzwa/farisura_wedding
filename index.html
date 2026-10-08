@@ -66,15 +66,21 @@
             max-width: 100%;
         }
 
-        button {
-            background: #6b5548;
-            color: white;
-            border: none;
-            padding: 14px 28px;
-            border-radius: 30px;
-            font-size: 16px;
-            cursor: pointer;
-        }
+       button {
+    background: #7a6253;
+    color: white;
+    border: none;
+    padding: 14px 28px;
+    border-radius: 30px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+button:hover {
+    transform: translateY(-1px);
+    opacity: 0.92;
+}
 
         button:disabled {
             opacity: 0.5;
