@@ -349,6 +349,19 @@ button:hover {
     background: #e8ddd4;
     color: #5a4638;
 }
+        #undoUpload {
+    display: none;
+    margin: 12px auto 0;
+    background: transparent;
+    color: #8c6f5d;
+    border: 1px solid #cdbeb2;
+    padding: 10px 20px;
+    font-size: 14px;
+}
+
+#undoUpload.active {
+    display: block;
+}
     </style>
 
 </head>
@@ -385,6 +398,13 @@ button:hover {
 </button>
 
 <div id="status"></div>
+
+<button
+    id="undoUpload"
+    type="button"
+>
+    Undo Upload
+</button>
 
 <div
     id="uploadConfirmation"
