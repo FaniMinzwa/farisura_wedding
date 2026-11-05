@@ -633,72 +633,55 @@ button:hover {
     .glitter {
         animation: none;
     }
-}
-        /* FLOATING CHAMPAGNE LIGHTS */
-
-/* DREAMY CHAMPAGNE BOKEH LIGHTS */
+}/* SOFT FLOATING BOKEH LIGHTS */
 
 .ambient-lights {
     position: fixed;
-    inset: -40px;
+    inset: 0;
     pointer-events: none;
     z-index: 9999;
-    opacity: 0.75;
-    filter: blur(12px);
+    opacity: 0.55;
+    filter: blur(10px);
+    mix-blend-mode: screen;
 
     background-image:
-        radial-gradient(circle,
-            rgba(255, 220, 170, 0.55) 0%,
-            rgba(255, 220, 170, 0.25) 35%,
-            transparent 72%),
-
-        radial-gradient(circle,
-            rgba(245, 202, 155, 0.45) 0%,
-            rgba(245, 202, 155, 0.18) 40%,
-            transparent 75%),
-
-        radial-gradient(circle,
-            rgba(255, 235, 205, 0.65) 0%,
-            rgba(255, 235, 205, 0.22) 35%,
-            transparent 75%),
-
-        radial-gradient(circle,
-            rgba(218, 180, 135, 0.4) 0%,
-            rgba(218, 180, 135, 0.15) 40%,
-            transparent 75%);
+        radial-gradient(circle, rgba(255, 220, 170, 0.8) 0%, rgba(255, 220, 170, 0.3) 25%, transparent 70%),
+        radial-gradient(circle, rgba(255, 235, 205, 0.8) 0%, rgba(255, 235, 205, 0.25) 30%, transparent 70%),
+        radial-gradient(circle, rgba(230, 190, 145, 0.7) 0%, rgba(230, 190, 145, 0.2) 30%, transparent 70%),
+        radial-gradient(circle, rgba(255, 225, 190, 0.8) 0%, rgba(255, 225, 190, 0.2) 30%, transparent 70%);
 
     background-size:
-        420px 420px,
-        520px 520px,
-        360px 360px,
-        480px 480px;
+        170px 170px,
+        220px 220px,
+        140px 140px,
+        190px 190px;
+
+    background-repeat: no-repeat;
 
     background-position:
-        0 0,
-        180px 100px,
-        280px 250px,
-        80px 320px;
+        10% 20%,
+        80% 35%,
+        65% 80%,
+        25% 70%;
 
-    background-repeat: repeat;
-
-    animation: dreamyBokeh 45s ease-in-out infinite alternate;
+    animation: bokehFloat 30s ease-in-out infinite alternate;
 }
 
-@keyframes dreamyBokeh {
+@keyframes bokehFloat {
     0% {
         background-position:
-            0 0,
-            180px 100px,
-            280px 250px,
-            80px 320px;
+            10% 20%,
+            80% 35%,
+            65% 80%,
+            25% 70%;
     }
 
     100% {
         background-position:
-            100px -120px,
-            80px 220px,
-            380px 100px,
-            -50px 180px;
+            18% 35%,
+            72% 20%,
+            55% 65%,
+            35% 85%;
     }
 }
 
@@ -706,7 +689,8 @@ button:hover {
     .ambient-lights {
         animation: none;
     }
-}    </style>
+}   
+    </style>
 
 </head>
 
