@@ -640,7 +640,7 @@ button:hover {
     inset: 0;
     pointer-events: none;
     z-index: 9999;
-    opacity: 0.55;
+    opacity: 0.85;
     filter: blur(10px);
     mix-blend-mode: screen;
 
@@ -651,10 +651,10 @@ button:hover {
         radial-gradient(circle, rgba(255, 225, 190, 0.8) 0%, rgba(255, 225, 190, 0.2) 30%, transparent 70%);
 
     background-size:
-        170px 170px,
-        220px 220px,
-        140px 140px,
-        190px 190px;
+    240px 240px,
+    300px 300px,
+    200px 200px,
+    260px 260px;
 
     background-repeat: no-repeat;
 
@@ -664,24 +664,24 @@ button:hover {
         65% 80%,
         25% 70%;
 
-    animation: bokehFloat 30s ease-in-out infinite alternate;
+    animation: bokehFloat 12s ease-in-out infinite alternate;
 }
 
 @keyframes bokehFloat {
     0% {
         background-position:
-            10% 20%,
-            80% 35%,
-            65% 80%,
-            25% 70%;
+            5% 15%,
+            85% 25%,
+            65% 85%,
+            20% 75%;
     }
 
     100% {
         background-position:
-            18% 35%,
-            72% 20%,
-            55% 65%,
-            35% 85%;
+            25% 45%,
+            65% 10%,
+            45% 60%,
+            40% 95%;
     }
 }
 
