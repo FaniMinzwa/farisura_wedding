@@ -634,13 +634,66 @@ button:hover {
         animation: none;
     }
 }
+        /* FLOATING CHAMPAGNE LIGHTS */
+
+.ambient-lights {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.45;
+
+    background-image:
+        radial-gradient(circle, rgba(222, 190, 145, 0.65) 1.5px, transparent 5px),
+        radial-gradient(circle, rgba(255, 226, 190, 0.55) 2px, transparent 7px),
+        radial-gradient(circle, rgba(205, 170, 135, 0.45) 1px, transparent 5px),
+        radial-gradient(circle, rgba(255, 239, 215, 0.7) 2px, transparent 8px);
+
+    background-size:
+        230px 260px,
+        310px 340px,
+        270px 300px,
+        360px 380px;
+
+    background-position:
+        0 0,
+        80px 120px,
+        150px 60px,
+        200px 180px;
+
+    animation: champagneDrift 35s linear infinite;
+}
+
+@keyframes champagneDrift {
+    0% {
+        background-position:
+            0 0,
+            80px 120px,
+            150px 60px,
+            200px 180px;
+    }
+
+    100% {
+        background-position:
+            100px -260px,
+            -80px -220px,
+            250px -300px,
+            0 -200px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ambient-lights {
+        animation: none;
+    }
+}
     </style>
 
 </head>
 
 
 <body>
-
+<div class="ambient-lights" aria-hidden="true"></div>
 
 <div class="container">
 
