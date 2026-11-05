@@ -247,6 +247,117 @@ button:hover {
     }
 
 }
+        
+/* WISH SUBMISSION FORM */
+
+.wishes-section {
+    max-width: 540px;
+    margin: 65px auto 35px;
+    padding: 0 15px;
+    text-align: center;
+}
+
+.wishes-section .gallery-title {
+    margin-top: 0;
+    margin-bottom: 12px;
+}
+
+.wishes-intro {
+    color: #927d70;
+    font-size: 14px;
+    margin: 0 auto 25px;
+    line-height: 1.7;
+}
+
+#wishForm {
+    background: #fffdf9;
+    padding: 30px 25px;
+    border: 1px solid #eee4da;
+    border-radius: 22px;
+    box-shadow: 0 8px 25px rgba(90, 70, 50, 0.06);
+    text-align: left;
+}
+
+#wishName,
+#wishMessage {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    margin: 0 0 18px;
+    padding: 15px 16px;
+    border: 1px solid #e8ddd4;
+    border-radius: 12px;
+    background: #fffefa;
+    color: #4b3b32;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    outline: none;
+}
+
+#wishName {
+    height: 48px;
+}
+
+#wishMessage {
+    min-height: 130px;
+    resize: vertical;
+    line-height: 1.7;
+}
+
+#wishName:focus,
+#wishMessage:focus {
+    border-color: #ad9180;
+}
+
+#wishName::placeholder,
+#wishMessage::placeholder {
+    color: #b5a69b;
+}
+
+.anonymous-option {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin: 0 0 20px;
+    color: #806e62;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.anonymous-option input {
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    accent-color: #80685b;
+}
+
+#wishSubmitButton {
+    width: 100%;
+    padding: 15px;
+    border-radius: 30px;
+    background: #80685b;
+    color: white;
+    font-size: 14px;
+    letter-spacing: 0.3px;
+}
+
+#wishStatus {
+    text-align: center;
+    font-size: 13px;
+    color: #927968;
+    margin: 14px 0 0;
+}
+
+@media (max-width: 600px) {
+    .wishes-section {
+        margin-top: 50px;
+    }
+
+    #wishForm {
+        padding: 25px 20px;
+    }
+}
+
         /* WISH DISPLAY */
 
 .wish-display-section {
@@ -623,6 +734,9 @@ button:hover {
 </button>
     <section class="wishes-section">
 
+    
+<section class="wishes-section">
+
     <h2 class="gallery-title">
         Leave a Little Wish
     </h2>
@@ -639,6 +753,13 @@ button:hover {
             placeholder="Your name (optional)"
         >
 
+        <textarea
+            id="wishMessage"
+            placeholder="Write your wish here..."
+            rows="5"
+            required
+        ></textarea>
+
         <label class="anonymous-option">
             <input
                 type="checkbox"
@@ -647,18 +768,11 @@ button:hover {
             Send anonymously
         </label>
 
-        <textarea
-            id="wishMessage"
-            placeholder="Write your wish here..."
-            rows="5"
-            required
-        ></textarea>
-
         <button
             type="submit"
             id="wishSubmitButton"
         >
-            Send Wish
+            Send Your Wish
         </button>
 
         <p id="wishStatus"></p>
