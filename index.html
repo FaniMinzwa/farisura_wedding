@@ -362,6 +362,99 @@ button:hover {
 #undoUpload.active {
     display: block;
 }
+        /* FLOATING BUTTERFLIES */
+
+.butterfly {
+    position: fixed;
+    z-index: 5;
+    pointer-events: none;
+    font-size: 19px;
+    opacity: 0.75;
+    animation: butterflyFloat 12s ease-in-out infinite;
+}
+
+.butterfly-one {
+    top: 25%;
+    left: -30px;
+    animation-delay: 0s;
+}
+
+.butterfly-two {
+    top: 65%;
+    left: -30px;
+    font-size: 16px;
+    animation-delay: 4s;
+}
+
+.butterfly-three {
+    top: 45%;
+    left: -30px;
+    font-size: 21px;
+    animation-delay: 8s;
+}
+
+@keyframes butterflyFloat {
+    0% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+    25% {
+        transform: translate(30vw, -35px) rotate(15deg);
+    }
+    50% {
+        transform: translate(60vw, 20px) rotate(-10deg);
+    }
+    75% {
+        transform: translate(85vw, -25px) rotate(15deg);
+    }
+    100% {
+        transform: translate(110vw, 10px) rotate(0deg);
+    }
+}
+
+/* SOFT GLITTER */
+
+.glitter {
+    position: fixed;
+    z-index: 4;
+    pointer-events: none;
+    color: #c4a6b5;
+    animation: glitterTwinkle 3s ease-in-out infinite;
+}
+
+.glitter-one {
+    top: 20%;
+    left: 20%;
+}
+
+.glitter-two {
+    top: 55%;
+    right: 15%;
+    animation-delay: 1s;
+}
+
+.glitter-three {
+    top: 80%;
+    left: 70%;
+    animation-delay: 2s;
+}
+
+@keyframes glitterTwinkle {
+    0%, 100% {
+        opacity: 0.2;
+        transform: scale(0.7);
+    }
+    50% {
+        opacity: 0.9;
+        transform: scale(1.2);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .butterfly,
+    .glitter {
+        animation: none;
+    }
+}
     </style>
 
 </head>
@@ -1467,6 +1560,15 @@ wishCardContainer.addEventListener(
 
 loadWishes();
 </script>
+    <!-- FLOATING BUTTERFLIES -->
+<div class="butterfly butterfly-one">🦋</div>
+<div class="butterfly butterfly-two">🦋</div>
+<div class="butterfly butterfly-three">🦋</div>
+
+<!-- LITTLE SPARKLES -->
+<div class="glitter glitter-one">✧</div>
+<div class="glitter glitter-two">✦</div>
+<div class="glitter glitter-three">✧</div>
 </body>
 
 </html>
