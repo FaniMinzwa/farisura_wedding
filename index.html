@@ -663,6 +663,83 @@ button:hover {
 
 
 <body>
+    
+<!-- WEDDING BACKGROUND MUSIC -->
+
+<audio id="weddingMusic" loop preload="auto">
+    <source src="wedding-music.mp3" type="audio/mpeg">
+</audio>
+
+<button id="musicButton" aria-label="Play background music" type="button">
+    ♪
+</button>
+
+<style>
+    #musicButton {
+        position: fixed;
+        bottom: 25px;
+        right: 20px;
+        width: 48px;
+        height: 48px;
+        border: 1px solid #e8d8ca;
+        border-radius: 50%;
+        background: #fffaf5;
+        color: #80685b;
+        font-size: 23px;
+        box-shadow: 0 4px 15px rgba(70, 50, 35, 0.15);
+        cursor: pointer;
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #musicButton.playing {
+        animation: musicPulse 2s infinite;
+    }
+
+    @keyframes musicPulse {
+        0%, 100% {
+            box-shadow: 0 4px 15px rgba(70, 50, 35, 0.15);
+        }
+        50% {
+            box-shadow: 0 4px 20px rgba(128, 104, 91, 0.4);
+        }
+    }
+</style>
+
+<script>
+    const weddingMusic = document.getElementById("weddingMusic");
+    const musicButton = document.getElementById("musicButton");
+
+    async function playWeddingMusic() {
+        try {
+            await weddingMusic.play();
+            musicButton.textContent = "Ⅱ";
+            musicButton.classList.add("playing");
+            musicButton.setAttribute("aria-label", "Pause background music");
+        } catch (error) {
+            musicButton.textContent = "♪";
+            musicButton.classList.remove("playing");
+            musicButton.setAttribute("aria-label", "Play background music");
+        }
+    }
+
+    musicButton.addEventListener("click", async () => {
+        if (weddingMusic.paused) {
+            await playWeddingMusic();
+        } else {
+            weddingMusic.pause();
+            musicButton.textContent = "♪";
+            musicButton.classList.remove("playing");
+            musicButton.setAttribute("aria-label", "Play background music");
+        }
+    });
+
+    // Attempt autoplay when the page opens
+    playWeddingMusic();
+</script>
+
 
 <div class="container">
 
