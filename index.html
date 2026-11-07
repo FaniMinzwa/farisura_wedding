@@ -921,6 +921,45 @@
     background: #604b3e;
     transform: translateY(-2px);
 }
+        /* BUTTERFLY MAGICAL SPARKLE TRAIL */
+
+.butterfly::after {
+    content: "✧  ·  ✦  ·  ✧";
+    position: absolute;
+    right: 28px;
+    top: 50%;
+    transform: translateY(-50%);
+    white-space: nowrap;
+
+    font-size: 13px;
+    letter-spacing: 5px;
+    color: #d8b68e;
+
+    opacity: 0.75;
+    filter: blur(0.5px);
+    text-shadow:
+        0 0 5px #fff0d4,
+        0 0 12px #e9c9e8;
+
+    pointer-events: none;
+    animation: butterflyTrail 1.8s ease-in-out infinite;
+}
+
+@keyframes butterflyTrail {
+    0%, 100% {
+        opacity: 0.25;
+    }
+
+    50% {
+        opacity: 0.9;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .butterfly::after {
+        animation: none;
+    }
+}
     </style>
 </head>
 
