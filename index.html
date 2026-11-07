@@ -635,51 +635,52 @@ button:hover {
     }
 }/* SOFT FLOATING BOKEH LIGHTS */
 
+/* SOFT FLOATING BOKEH LIGHTS */
+
 .ambient-lights {
     position: fixed;
     inset: 0;
     pointer-events: none;
     z-index: 9999;
     opacity: 0.85;
-    filter: blur(10px);
-    mix-blend-mode: screen;
+    filter: blur(7px);
 
     background-image:
-        background-image:
-    radial-gradient(circle,
-        rgba(255, 190, 95, 0.95) 0%,
-        rgba(255, 190, 95, 0.55) 12%,
-        rgba(218, 151, 76, 0.25) 35%,
-        transparent 70%),
+        radial-gradient(circle,
+            rgba(190, 119, 53, 0.75) 0%,
+            rgba(218, 157, 91, 0.55) 15%,
+            rgba(230, 180, 120, 0.2) 40%,
+            transparent 72%),
 
-    radial-gradient(circle,
-        rgba(255, 215, 145, 0.95) 0%,
-        rgba(255, 195, 110, 0.45) 18%,
-        rgba(190, 130, 65, 0.2) 40%,
-        transparent 75%),
+        radial-gradient(circle,
+            rgba(255, 202, 125, 0.9) 0%,
+            rgba(225, 166, 91, 0.5) 20%,
+            rgba(210, 155, 95, 0.15) 48%,
+            transparent 75%),
 
-    radial-gradient(circle,
-        rgba(210, 145, 75, 0.8) 0%,
-        rgba(210, 145, 75, 0.35) 25%,
-        transparent 70%),
+        radial-gradient(circle,
+            rgba(180, 112, 57, 0.65) 0%,
+            rgba(218, 163, 105, 0.3) 35%,
+            transparent 72%),
 
-    radial-gradient(circle,
-        rgba(255, 225, 170, 1) 0%,
-        rgba(255, 190, 110, 0.45) 20%,
-        transparent 70%);
+        radial-gradient(circle,
+            rgba(255, 218, 157, 0.95) 0%,
+            rgba(226, 170, 105, 0.4) 25%,
+            transparent 70%);
+
     background-size:
-    240px 240px,
-    300px 300px,
-    200px 200px,
-    260px 260px;
+        240px 240px,
+        300px 300px,
+        190px 190px,
+        260px 260px;
 
     background-repeat: no-repeat;
 
     background-position:
-        10% 20%,
-        80% 35%,
-        65% 80%,
-        25% 70%;
+        5% 15%,
+        85% 25%,
+        65% 85%,
+        20% 75%;
 
     animation: bokehFloat 12s ease-in-out infinite alternate;
 }
@@ -706,7 +707,7 @@ button:hover {
     .ambient-lights {
         animation: none;
     }
-}   
+} 
     </style>
 
 </head>
