@@ -647,28 +647,31 @@ button:hover {
     opacity: 0.7;
     filter: blur(15px);
 
-    background-image:
-        radial-gradient(circle,
-            rgba(255, 239, 210, 0.85) 0%,
-            rgba(255, 218, 165, 0.4) 25%,
-            rgba(255, 218, 165, 0.12) 55%,
-            transparent 75%),
+   background-image:
+    radial-gradient(circle,
+        rgba(255, 250, 190, 1) 0%,
+        rgba(255, 231, 160, 0.85) 8%,
+        rgba(255, 218, 165, 0.4) 25%,
+        rgba(255, 218, 165, 0.12) 55%,
+        transparent 75%),
 
-        radial-gradient(circle,
-            rgba(255, 230, 190, 0.8) 0%,
-            rgba(255, 205, 145, 0.35) 30%,
-            transparent 75%),
+    radial-gradient(circle,
+        rgba(255, 247, 185, 0.98) 0%,
+        rgba(255, 225, 155, 0.7) 12%,
+        rgba(255, 205, 145, 0.35) 30%,
+        transparent 75%),
 
-        radial-gradient(circle,
-            rgba(255, 242, 220, 0.9) 0%,
-            rgba(245, 207, 157, 0.3) 35%,
-            transparent 75%),
+    radial-gradient(circle,
+        rgba(255, 252, 205, 1) 0%,
+        rgba(255, 230, 175, 0.7) 10%,
+        rgba(245, 207, 157, 0.3) 35%,
+        transparent 75%),
 
-        radial-gradient(circle,
-            rgba(255, 225, 185, 0.8) 0%,
-            rgba(255, 210, 160, 0.3) 30%,
-            transparent 75%);
-
+    radial-gradient(circle,
+        rgba(255, 248, 195, 0.98) 0%,
+        rgba(255, 225, 165, 0.65) 12%,
+        rgba(255, 210, 160, 0.3) 30%,
+        transparent 75%);
     background-size:
         200px 200px,
         250px 250px,
@@ -708,7 +711,29 @@ button:hover {
     .ambient-lights {
         animation: none;
     }
-} 
+}
+        /* CUSTOM CHOOSE FILE BUTTON */
+
+#photo {
+    font-size: 14px;
+}
+
+#photo::file-selector-button {
+    padding: 10px 17px;
+    margin-right: 10px;
+    border: 1px solid #d8c5b6;
+    border-radius: 9px;
+    background: #f3e9df;
+    color: #604b3e;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+#photo::file-selector-button:hover {
+    background: #e9d9ca;
+}
     </style>
 
 </head>
