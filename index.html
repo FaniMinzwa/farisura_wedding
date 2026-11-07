@@ -633,73 +633,74 @@ button:hover {
     .glitter {
         animation: none;
     }
-}/* SOFT FLOATING BOKEH LIGHTS */
+}
 
 /* SOFT FLOATING BOKEH LIGHTS */
+
+/* SOFT CHAMPAGNE GLOWING LIGHTS */
 
 .ambient-lights {
     position: fixed;
     inset: 0;
     pointer-events: none;
     z-index: 9999;
-    opacity: 0.85;
-    filter: blur(7px);
+    opacity: 0.7;
+    filter: blur(15px);
 
     background-image:
         radial-gradient(circle,
-            rgba(190, 119, 53, 0.75) 0%,
-            rgba(218, 157, 91, 0.55) 15%,
-            rgba(230, 180, 120, 0.2) 40%,
-            transparent 72%),
-
-        radial-gradient(circle,
-            rgba(255, 202, 125, 0.9) 0%,
-            rgba(225, 166, 91, 0.5) 20%,
-            rgba(210, 155, 95, 0.15) 48%,
+            rgba(255, 239, 210, 0.85) 0%,
+            rgba(255, 218, 165, 0.4) 25%,
+            rgba(255, 218, 165, 0.12) 55%,
             transparent 75%),
 
         radial-gradient(circle,
-            rgba(180, 112, 57, 0.65) 0%,
-            rgba(218, 163, 105, 0.3) 35%,
-            transparent 72%),
+            rgba(255, 230, 190, 0.8) 0%,
+            rgba(255, 205, 145, 0.35) 30%,
+            transparent 75%),
 
         radial-gradient(circle,
-            rgba(255, 218, 157, 0.95) 0%,
-            rgba(226, 170, 105, 0.4) 25%,
-            transparent 70%);
+            rgba(255, 242, 220, 0.9) 0%,
+            rgba(245, 207, 157, 0.3) 35%,
+            transparent 75%),
+
+        radial-gradient(circle,
+            rgba(255, 225, 185, 0.8) 0%,
+            rgba(255, 210, 160, 0.3) 30%,
+            transparent 75%);
 
     background-size:
-        240px 240px,
-        300px 300px,
-        190px 190px,
-        260px 260px;
+        200px 200px,
+        250px 250px,
+        170px 170px,
+        220px 220px;
 
     background-repeat: no-repeat;
 
     background-position:
-        5% 15%,
+        5% 20%,
         85% 25%,
         65% 85%,
-        20% 75%;
+        25% 70%;
 
-    animation: bokehFloat 12s ease-in-out infinite alternate;
+    animation: bokehFloat 16s ease-in-out infinite alternate;
 }
 
 @keyframes bokehFloat {
     0% {
         background-position:
-            5% 15%,
+            5% 20%,
             85% 25%,
             65% 85%,
-            20% 75%;
+            25% 70%;
     }
 
     100% {
         background-position:
-            25% 45%,
-            65% 10%,
-            45% 60%,
-            40% 95%;
+            20% 35%,
+            70% 15%,
+            50% 65%,
+            40% 85%;
     }
 }
 
