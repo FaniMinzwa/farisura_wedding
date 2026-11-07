@@ -1,26 +1,20 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 
-<head> 
-
+<head>
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Faris & Maisura | Wedding Memories</title>
+
     <link
-    href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap"
-    rel="stylesheet"
->
+        href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap"
+        rel="stylesheet"
+    >
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
-
         * {
             box-sizing: border-box;
         }
@@ -32,6 +26,10 @@
             color: #4b3b32;
         }
 
+        body.intro-active {
+            overflow: hidden;
+        }
+
         .container {
             max-width: 900px;
             margin: auto;
@@ -40,24 +38,25 @@
         }
 
         h1 {
-    font-family: Georgia, serif;
-    font-size: 42px;
-    font-weight: normal;
-    letter-spacing: 1px;
-    margin-bottom: 5px;
-}
-        .couple-names {
-    font-family: "Great Vibes", cursive;
-    font-size: 58px;
-    font-weight: normal;
-    letter-spacing: 1px;
-}
+            font-family: Georgia, serif;
+            font-size: 42px;
+            font-weight: normal;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
 
-h2 {
-    font-family: Georgia, serif;
-    font-weight: normal;
-    margin-top: 5px;
-}
+        .couple-names {
+            font-family: "Great Vibes", cursive;
+            font-size: 58px;
+            font-weight: normal;
+            letter-spacing: 1px;
+        }
+
+        h2 {
+            font-family: Georgia, serif;
+            font-weight: normal;
+            margin-top: 5px;
+        }
 
         .intro {
             max-width: 500px;
@@ -66,38 +65,39 @@ h2 {
         }
 
         .upload-box {
-    background: #fffdf9;
-    padding: 35px 25px;
-    border-radius: 24px;
-    max-width: 500px;
-    margin: auto;
-    box-shadow: 0 8px 25px rgba(90, 70, 50, 0.08);
-    border: 1px solid #eee4da;
-}
+            background: #fffdf9;
+            padding: 35px 25px;
+            border-radius: 24px;
+            max-width: 500px;
+            margin: auto;
+            box-shadow: 0 8px 25px rgba(90, 70, 50, 0.08);
+            border: 1px solid #eee4da;
+        }
 
         input {
             margin: 20px 0;
             max-width: 100%;
         }
 
-       button {
-    background: #7a6253;
-    color: white;
-    border: none;
-    padding: 14px 28px;
-    border-radius: 30px;
-    font-size: 15px;
-    cursor: pointer;
-    transition: transform 0.2s ease, opacity 0.2s ease;
-}
+        button {
+            background: #7a6253;
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 30px;
+            font-size: 15px;
+            cursor: pointer;
+            transition: transform 0.2s ease, opacity 0.2s ease;
+        }
 
-button:hover {
-    transform: translateY(-1px);
-    opacity: 0.92;
-}
+        button:hover {
+            transform: translateY(-1px);
+            opacity: 0.92;
+        }
 
         button:disabled {
             opacity: 0.5;
+            cursor: not-allowed;
         }
 
         #status {
@@ -111,29 +111,63 @@ button:hover {
         }
 
         .gallery {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    max-width: 850px;
-    margin: auto;
-}
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            max-width: 850px;
+            margin: auto;
+        }
 
-.gallery img {
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    object-fit: cover;
-    border-radius: 16px;
-    display: block;
-    cursor: pointer;
-    transition: transform 0.2s ease;
-}
+        .gallery img {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+            border-radius: 16px;
+            display: block;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
 
         .gallery img:hover {
             transform: scale(1.02);
         }
 
-        /* Full-screen photo viewer */
-        /* Swipe navigation */
+        .show-more-button {
+            margin-top: 22px;
+            background: transparent;
+            color: #80685b;
+            border: 1px solid #cdbeb2;
+            padding: 11px 22px;
+            font-size: 14px;
+        }
+
+        .show-more-button span {
+            margin-left: 5px;
+        }
+
+        /* LIGHTBOX */
+
+        .lightbox {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.92);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox-content {
+            max-width: 95vw;
+            max-height: 85vh;
+            object-fit: contain;
+            border-radius: 8px;
+        }
 
         .nav-button {
             position: absolute;
@@ -171,35 +205,6 @@ button:hover {
             border-radius: 20px;
         }
 
-        @media (max-width: 600px) {
-
-            .nav-button {
-                display: none;
-            }
-
-        }
-        .lightbox {
-            display: none;
-            position: fixed;
-            z-index: 9999;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.92);
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .lightbox.active {
-            display: flex;
-        }
-
-        .lightbox-content {
-            max-width: 95vw;
-            max-height: 85vh;
-            object-fit: contain;
-            border-radius: 8px;
-        }
-
         .close-button {
             position: absolute;
             top: 18px;
@@ -227,1867 +232,2075 @@ button:hover {
             font-weight: bold;
         }
 
-        .hidden-photo {
-    display: none;
-}
+        /* WISH SUBMISSION FORM */
 
-@media (max-width: 600px) {
+        .wishes-section {
+            max-width: 540px;
+            margin: 65px auto 35px;
+            padding: 0 15px;
+            text-align: center;
+        }
 
-    .gallery {
-        grid-template-columns: repeat(2, 1fr);
-    }
+        .wishes-section .gallery-title {
+            margin-top: 0;
+            margin-bottom: 12px;
+        }
 
-    h1 {
-        font-size: 30px;
-    }
+        .wishes-intro {
+            color: #927d70;
+            font-size: 14px;
+            margin: 0 auto 25px;
+            line-height: 1.7;
+        }
 
-    .lightbox-content {
-        max-width: 96vw;
-        max-height: 78vh;
-    }
+        #wishForm {
+            background: #fffdf9;
+            padding: 30px 25px;
+            border: 1px solid #eee4da;
+            border-radius: 22px;
+            box-shadow: 0 8px 25px rgba(90, 70, 50, 0.06);
+            text-align: left;
+        }
 
-}
-        
-/* WISH SUBMISSION FORM */
+        #wishName,
+        #wishMessage {
+            display: block;
+            width: 100%;
+            max-width: 100%;
+            margin: 0 0 18px;
+            padding: 15px 16px;
+            border: 1px solid #e8ddd4;
+            border-radius: 12px;
+            background: #fffefa;
+            color: #4b3b32;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            outline: none;
+        }
 
-.wishes-section {
-    max-width: 540px;
-    margin: 65px auto 35px;
-    padding: 0 15px;
-    text-align: center;
-}
+        #wishName {
+            height: 48px;
+        }
 
-.wishes-section .gallery-title {
-    margin-top: 0;
-    margin-bottom: 12px;
-}
+        #wishMessage {
+            min-height: 130px;
+            resize: vertical;
+            line-height: 1.7;
+        }
 
-.wishes-intro {
-    color: #927d70;
-    font-size: 14px;
-    margin: 0 auto 25px;
-    line-height: 1.7;
-}
+        #wishName:focus,
+        #wishMessage:focus {
+            border-color: #ad9180;
+        }
 
-#wishForm {
-    background: #fffdf9;
-    padding: 30px 25px;
-    border: 1px solid #eee4da;
-    border-radius: 22px;
-    box-shadow: 0 8px 25px rgba(90, 70, 50, 0.06);
-    text-align: left;
-}
+        #wishName::placeholder,
+        #wishMessage::placeholder {
+            color: #b5a69b;
+        }
 
-#wishName,
-#wishMessage {
-    display: block;
-    width: 100%;
-    max-width: 100%;
-    margin: 0 0 18px;
-    padding: 15px 16px;
-    border: 1px solid #e8ddd4;
-    border-radius: 12px;
-    background: #fffefa;
-    color: #4b3b32;
-    font-family: Arial, sans-serif;
-    font-size: 14px;
-    outline: none;
-}
+        .anonymous-option {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            margin: 0 0 20px;
+            color: #806e62;
+            font-size: 13px;
+            cursor: pointer;
+        }
 
-#wishName {
-    height: 48px;
-}
+        .anonymous-option input {
+            width: 16px;
+            height: 16px;
+            margin: 0;
+            accent-color: #80685b;
+        }
 
-#wishMessage {
-    min-height: 130px;
-    resize: vertical;
-    line-height: 1.7;
-}
+        #wishSubmitButton {
+            width: 100%;
+            padding: 15px;
+            border-radius: 30px;
+            background: #80685b;
+            color: white;
+            font-size: 14px;
+            letter-spacing: 0.3px;
+        }
 
-#wishName:focus,
-#wishMessage:focus {
-    border-color: #ad9180;
-}
-
-#wishName::placeholder,
-#wishMessage::placeholder {
-    color: #b5a69b;
-}
-
-.anonymous-option {
-    display: flex;
-    align-items: center;
-    gap: 9px;
-    margin: 0 0 20px;
-    color: #806e62;
-    font-size: 13px;
-    cursor: pointer;
-}
-
-.anonymous-option input {
-    width: 16px;
-    height: 16px;
-    margin: 0;
-    accent-color: #80685b;
-}
-
-#wishSubmitButton {
-    width: 100%;
-    padding: 15px;
-    border-radius: 30px;
-    background: #80685b;
-    color: white;
-    font-size: 14px;
-    letter-spacing: 0.3px;
-}
-
-#wishStatus {
-    text-align: center;
-    font-size: 13px;
-    color: #927968;
-    margin: 14px 0 0;
-}
-
-@media (max-width: 600px) {
-    .wishes-section {
-        margin-top: 50px;
-    }
-
-    #wishForm {
-        padding: 25px 20px;
-    }
-}
+        #wishStatus {
+            text-align: center;
+            font-size: 13px;
+            color: #927968;
+            margin: 14px 0 0;
+        }
 
         /* WISH DISPLAY */
 
-.wish-display-section {
-    text-align: center;
-    padding: 40px 20px 60px;
-}
+        .wish-display-section {
+            text-align: center;
+            padding: 40px 20px 60px;
+        }
 
-.wish-card-container {
-    max-width: 500px;
-    margin: 25px auto 15px;
-}
+        .wish-card-container {
+            max-width: 500px;
+            margin: 25px auto 15px;
+        }
 
-.wish-card {
-    background: #fffdf9;
-    border-radius: 24px;
-    padding: 35px 25px;
-    box-shadow: 0 8px 25px rgba(90, 70, 50, 0.08);
-    min-height: 180px;
+        .wish-card {
+            background: #fffdf9;
+            border-radius: 24px;
+            padding: 35px 25px;
+            box-shadow: 0 8px 25px rgba(90, 70, 50, 0.08);
+            min-height: 180px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
 
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
+        .wish-card-message {
+            margin: 0;
+            font-size: 18px;
+            line-height: 1.7;
+            color: #5a4638;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        }
 
-.wish-card-message {
-    margin: 0;
-    font-size: 18px;
-    line-height: 1.7;
-    color: #5a4638;
-}
+        .wish-card-name {
+            margin: 20px 0 0;
+            font-size: 14px;
+            color: #927968;
+            font-style: italic;
+        }
 
-.wish-card-name {
-    margin: 20px 0 0;
-    font-size: 14px;
-    color: #927968;
-    font-style: italic;
-}
+        .wish-dots {
+            display: flex;
+            justify-content: center;
+            gap: 7px;
+            margin-top: 18px;
+        }
 
-.wish-dots {
-    display: flex;
-    justify-content: center;
-    gap: 7px;
-    margin-top: 18px;
-}
+        .wish-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #d8c9bd;
+            cursor: pointer;
+        }
 
-.wish-dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: #d8c9bd;
-}
+        .wish-dot.active {
+            background: #8c6f5d;
+        }
 
-.wish-dot.active {
-    background: #8c6f5d;
-}
+        /* UPLOAD CONFIRMATION */
+
         .upload-confirmation {
-    display: none;
-    position: fixed;
-    inset: 0;
-    z-index: 10000;
-    background: rgba(75, 59, 50, 0.45);
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-}
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 10000;
+            background: rgba(75, 59, 50, 0.45);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
 
-.upload-confirmation.active {
-    display: flex;
-}
+        .upload-confirmation.active {
+            display: flex;
+        }
 
-.confirmation-box {
-    background: #fffdf9;
-    width: 100%;
-    max-width: 340px;
-    padding: 30px 25px;
-    border-radius: 22px;
-    text-align: center;
-    box-shadow: 0 10px 30px rgba(75, 59, 50, 0.15);
-}
+        .confirmation-box {
+            background: #fffdf9;
+            width: 100%;
+            max-width: 340px;
+            padding: 30px 25px;
+            border-radius: 22px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(75, 59, 50, 0.15);
+        }
 
-.confirmation-box p {
-    margin: 0 0 25px;
-    font-size: 17px;
-    color: #5a4638;
-}
+        .confirmation-box p {
+            margin: 0 0 25px;
+            font-size: 17px;
+            color: #5a4638;
+        }
 
-.confirmation-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-}
+        .confirmation-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
 
-.confirmation-buttons button {
-    padding: 11px 22px;
-    font-size: 14px;
-}
+        .confirmation-buttons button {
+            padding: 11px 22px;
+            font-size: 14px;
+        }
 
-#cancelUpload {
-    background: #e8ddd4;
-    color: #5a4638;
-}
+        #cancelUpload {
+            background: #e8ddd4;
+            color: #5a4638;
+        }
+
         #undoUpload {
-    display: none;
-    margin: 12px auto 0;
-    background: transparent;
-    color: #8c6f5d;
-    border: 1px solid #cdbeb2;
-    padding: 10px 20px;
-    font-size: 14px;
-}
+            display: none;
+            margin: 12px auto 0;
+            background: transparent;
+            color: #8c6f5d;
+            border: 1px solid #cdbeb2;
+            padding: 10px 20px;
+            font-size: 14px;
+        }
 
-#undoUpload.active {
-    display: block;
-}
+        #undoUpload.active {
+            display: block;
+        }
+
         /* FLOATING BUTTERFLIES */
 
+        .butterfly {
+            position: fixed;
+            z-index: 5;
+            width: 38px;
+            height: 38px;
+            pointer-events: auto;
+            cursor: pointer;
+            opacity: 0;
+            filter:
+                drop-shadow(0 0 5px rgba(255, 220, 240, 0.9))
+                drop-shadow(0 0 12px rgba(218, 185, 235, 0.65));
+            animation: butterflyFlight 24s ease-in-out infinite;
+        }
 
-/* MAGICAL FLOATING BUTTERFLIES */
+        .butterfly-one {
+            top: 25%;
+            left: -10vw;
+            animation-delay: 0s;
+        }
 
-.butterfly {
-    position: fixed;
-    z-index: 5;
-    width: 38px;
-    height: 38px;
-    pointer-events: auto;
-cursor: pointer;
-    opacity: 0;
-    filter:
-        drop-shadow(0 0 5px rgba(255, 220, 240, 0.9))
-        drop-shadow(0 0 12px rgba(218, 185, 235, 0.65));
-    animation: butterflyFlight 24s ease-in-out infinite;
-}
+        .butterfly-two {
+            top: 65%;
+            left: -10vw;
+            width: 30px;
+            height: 30px;
+            animation-delay: 8s;
+        }
 
-.butterfly-one {
-    top: 25%;
-    left: -10vw;
-    animation-delay: 0s;
-}
+        .butterfly-three {
+            top: 45%;
+            left: -10vw;
+            width: 34px;
+            height: 34px;
+            animation-delay: 16s;
+        }
 
-.butterfly-two {
-    top: 65%;
-    left: -10vw;
-    width: 30px;
-    height: 30px;
-    animation-delay: 8s;
-}
+        @keyframes butterflyFlight {
+            0% {
+                transform: translate(0, 0) rotate(-8deg);
+                opacity: 0;
+            }
 
-.butterfly-three {
-    top: 45%;
-    left: -10vw;
-    width: 34px;
-    height: 34px;
-    animation-delay: 16s;
-}
+            8% {
+                opacity: 0.85;
+            }
 
-/* Gentle, drifting flight */
+            25% {
+                transform: translate(25vw, -35px) rotate(8deg);
+            }
 
-@keyframes butterflyFlight {
-    0% {
-        transform: translate(0, 0) rotate(-8deg);
-        opacity: 0;
-    }
-    8% {
-        opacity: 0.85;
-    }
-    25% {
-        transform: translate(25vw, -35px) rotate(8deg);
-    }
-    50% {
-        transform: translate(55vw, 20px) rotate(-5deg);
-    }
-    75% {
-        transform: translate(85vw, -30px) rotate(10deg);
-    }
-    92% {
-        opacity: 0.85;
-    }
-    100% {
-        transform: translate(115vw, 10px) rotate(-8deg);
-        opacity: 0;
-    }
-}
+            50% {
+                transform: translate(55vw, 20px) rotate(-5deg);
+            }
 
-/* Delicate wing movement */
+            75% {
+                transform: translate(85vw, -30px) rotate(10deg);
+            }
 
-.butterfly-wing-left {
-    transform-origin: 50px 50px;
-    animation: flapLeft 0.45s ease-in-out infinite alternate;
-}
+            92% {
+                opacity: 0.85;
+            }
 
-.butterfly-wing-right {
-    transform-origin: 50px 50px;
-    animation: flapRight 0.45s ease-in-out infinite alternate;
-}
+            100% {
+                transform: translate(115vw, 10px) rotate(-8deg);
+                opacity: 0;
+            }
+        }
 
-@keyframes flapLeft {
-    from { transform: scaleX(1); }
-    to { transform: scaleX(0.45); }
-}
+        .butterfly-wing-left {
+            transform-origin: 50px 50px;
+            animation: flapLeft 0.45s ease-in-out infinite alternate;
+        }
 
-@keyframes flapRight {
-    from { transform: scaleX(1); }
-    to { transform: scaleX(0.45); }
-}
-        /* BUTTERFLY FLY-AWAY INTERACTION */
+        .butterfly-wing-right {
+            transform-origin: 50px 50px;
+            animation: flapRight 0.45s ease-in-out infinite alternate;
+        }
 
-.butterfly {
-    cursor: pointer;
-}
+        @keyframes flapLeft {
+            from { transform: scaleX(1); }
+            to { transform: scaleX(0.45); }
+        }
 
-.butterfly-svg {
-    width: 100%;
-    height: 100%;
-    overflow: visible;
-}
+        @keyframes flapRight {
+            from { transform: scaleX(1); }
+            to { transform: scaleX(0.45); }
+        }
 
-.butterfly-upper {
-    fill: #e9c9e8;
-}
+        .butterfly-svg {
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+        }
 
-.butterfly-lower {
-    fill: #f5d9dc;
-}
+        .butterfly-upper {
+            fill: #e9c9e8;
+        }
 
-.butterfly-body {
-    fill: #9c789c;
-}
+        .butterfly-lower {
+            fill: #f5d9dc;
+        }
 
-@media (prefers-reduced-motion: reduce) {
-    .butterfly,
-    .butterfly-wing-left,
-    .butterfly-wing-right {
-        animation: none;
-    }
-}
+        .butterfly-body {
+            fill: #9c789c;
+        }
 
+        /* SOFT GLITTER */
 
-/* SOFT GLITTER */
+        .glitter {
+            position: fixed;
+            z-index: 4;
+            pointer-events: none;
+            color: #c4a6b5;
+            animation: glitterTwinkle 3s ease-in-out infinite;
+        }
 
-.glitter {
-    position: fixed;
-    z-index: 4;
-    pointer-events: none;
-    color: #c4a6b5;
-    animation: glitterTwinkle 3s ease-in-out infinite;
-}
+        .glitter-one {
+            top: 20%;
+            left: 20%;
+        }
 
-.glitter-one {
-    top: 20%;
-    left: 20%;
-}
+        .glitter-two {
+            top: 55%;
+            right: 15%;
+            animation-delay: 1s;
+        }
 
-.glitter-two {
-    top: 55%;
-    right: 15%;
-    animation-delay: 1s;
-}
+        .glitter-three {
+            top: 80%;
+            left: 70%;
+            animation-delay: 2s;
+        }
 
-.glitter-three {
-    top: 80%;
-    left: 70%;
-    animation-delay: 2s;
-}
+        @keyframes glitterTwinkle {
+            0%, 100% {
+                opacity: 0.2;
+                transform: scale(0.7);
+            }
 
-@keyframes glitterTwinkle {
-    0%, 100% {
-        opacity: 0.2;
-        transform: scale(0.7);
-    }
-    50% {
-        opacity: 0.9;
-        transform: scale(1.2);
-    }
-}
+            50% {
+                opacity: 0.9;
+                transform: scale(1.2);
+            }
+        }
 
-@media (prefers-reduced-motion: reduce) {
-    .butterfly,
-    .glitter {
-        animation: none;
-    }
-}
-        
         /* CUSTOM CHOOSE FILE BUTTON */
 
-#photo {
-    font-size: 14px;
-}
+        #photo {
+            font-size: 14px;
+        }
 
-#photo::file-selector-button {
-    padding: 10px 17px;
-    margin-right: 10px;
-    border: 1px solid #d8c5b6;
-    border-radius: 9px;
-    background: #f3e9df;
-    color: #604b3e;
-    font-family: Arial, sans-serif;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background 0.2s ease;
-}
+        #photo::file-selector-button {
+            padding: 10px 17px;
+            margin-right: 10px;
+            border: 1px solid #d8c5b6;
+            border-radius: 9px;
+            background: #f3e9df;
+            color: #604b3e;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
 
-#photo::file-selector-button:hover {
-    background: #e9d9ca;
-}
+        #photo::file-selector-button:hover {
+            background: #e9d9ca;
+        }
+
+        /* WEDDING INTRO - WOODEN DOUBLE DOORS */
+
+        .intro-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 20000;
+            overflow: hidden;
+            perspective: 1500px;
+            background:
+                radial-gradient(
+                    ellipse at center,
+                    #fff0c9 0%,
+                    #d9a86d 45%,
+                    #76503a 100%
+                );
+        }
+
+        .intro-glow {
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(
+                    ellipse at center,
+                    rgba(255, 244, 210, 0.95),
+                    rgba(255, 215, 160, 0.45) 45%,
+                    transparent 75%
+                );
+        }
+
+        .intro-content {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 25px;
+            opacity: 0;
+            transform: translateY(15px);
+            transition:
+                opacity 1.2s ease 1s,
+                transform 1.2s ease 1s;
+        }
+
+        .intro-screen.open .intro-content {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .intro-small-text {
+            font-family: Georgia, serif;
+            font-size: 11px;
+            letter-spacing: 4px;
+            color: #927052;
+            margin-bottom: 20px;
+        }
+
+        .intro-names {
+            font-family: "Great Vibes", cursive;
+            font-size: clamp(48px, 9vw, 85px);
+            font-weight: normal;
+            line-height: 1.15;
+            color: #76503a;
+            margin: 0;
+        }
+
+        .intro-ampersand {
+            font-family: Georgia, serif;
+            font-size: 30px;
+            color: #a77b51;
+            margin: 8px 0;
+        }
+
+        .intro-divider {
+            width: 120px;
+            height: 1px;
+            background: #b18b67;
+            margin: 22px 0;
+        }
+
+        #enterWeddingButton {
+            margin-top: 30px;
+            padding: 14px 30px;
+            border: 1px solid #94704e;
+            border-radius: 30px;
+            background: #80604a;
+            color: white;
+            font-family: Georgia, serif;
+            font-size: 13px;
+            letter-spacing: 2px;
+            cursor: pointer;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(10px);
+            transition:
+                opacity 0.8s ease 2s,
+                transform 0.8s ease 2s;
+        }
+
+        .intro-screen.open #enterWeddingButton {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+
+        .intro-door {
+            position: absolute;
+            top: 0;
+            width: 50.5%;
+            height: 100%;
+            z-index: 2;
+            background:
+                repeating-linear-gradient(
+                    90deg,
+                    transparent 0px,
+                    rgba(255,255,255,0.035) 3px,
+                    transparent 8px,
+                    rgba(0,0,0,0.08) 13px
+                ),
+                linear-gradient(
+                    90deg,
+                    #321b12,
+                    #70452d 35%,
+                    #4b2c1d 70%,
+                    #28150f
+                );
+            border: 8px solid #3b2116;
+            box-shadow:
+                inset 0 0 0 5px #a4774e,
+                inset 0 0 0 10px #3d2418,
+                inset 0 0 35px rgba(0,0,0,0.6),
+                0 0 30px rgba(0,0,0,0.4);
+            transition:
+                transform 2s cubic-bezier(0.65, 0, 0.25, 1);
+            backface-visibility: hidden;
+        }
+
+        .door-left {
+            left: 0;
+            transform-origin: left center;
+        }
+
+        .door-right {
+            right: 0;
+            transform-origin: right center;
+        }
+
+        .intro-door::before {
+            content: "";
+            position: absolute;
+            inset: 7%;
+            border: 3px solid #a4774e;
+            box-shadow:
+                inset 0 0 0 5px rgba(30,15,8,0.65),
+                inset 0 0 0 8px #805438;
+        }
+
+        .intro-door::after {
+            content: "✧";
+            position: absolute;
+            top: 48%;
+            color: #d1a46e;
+            font-size: 35px;
+            text-shadow: 0 0 12px rgba(255,220,160,0.5);
+        }
+
+        .door-left::after {
+            right: 12px;
+        }
+
+        .door-right::after {
+            left: 12px;
+        }
+
+        .intro-screen.open .door-left {
+            transform: rotateY(-105deg);
+        }
+
+        .intro-screen.open .door-right {
+            transform: rotateY(105deg);
+        }
+
+        /* MUSIC BUTTON */
+
+        #musicButton {
+            position: fixed;
+            bottom: 25px;
+            right: 20px;
+            width: 48px;
+            height: 48px;
+            border: 1px solid #e8d8ca;
+            border-radius: 50%;
+            background: #fffaf5;
+            color: #80685b;
+            font-size: 23px;
+            box-shadow: 0 4px 15px rgba(70, 50, 35, 0.15);
+            cursor: pointer;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #musicButton.playing {
+            animation: musicPulse 2s infinite;
+        }
+
+        @keyframes musicPulse {
+            0%, 100% {
+                box-shadow: 0 4px 15px rgba(70, 50, 35, 0.15);
+            }
+
+            50% {
+                box-shadow: 0 4px 20px rgba(128, 104, 91, 0.4);
+            }
+        }
+
+        /* MOBILE ADJUSTMENTS */
+
+        @media (max-width: 600px) {
+            .gallery {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            h1 {
+                font-size: 30px;
+            }
+
+            .lightbox-content {
+                max-width: 96vw;
+                max-height: 78vh;
+            }
+
+            .nav-button {
+                display: none;
+            }
+
+            .wishes-section {
+                margin-top: 50px;
+            }
+
+            #wishForm {
+                padding: 25px 20px;
+            }
+
+            .intro-door {
+                border-width: 5px;
+            }
+
+            .intro-door::before {
+                inset: 5%;
+                border-width: 2px;
+            }
+
+            .intro-names {
+                font-size: 58px;
+            }
+
+            .intro-small-text {
+                font-size: 9px;
+                letter-spacing: 3px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .butterfly,
+            .butterfly-wing-left,
+            .butterfly-wing-right,
+            .glitter {
+                animation: none;
+            }
+        }
     </style>
-
 </head>
 
+<body class="intro-active">
 
-<body>
-    
-<!-- WEDDING BACKGROUND MUSIC -->
+    <!-- WEDDING INTRO -->
 
-<audio id="weddingMusic" loop preload="auto">
-   <source src="wedding-music.mp3.mp3" type="audio/mpeg">
-</audio>
+    <div id="introScreen" class="intro-screen">
 
-<button id="musicButton" aria-label="Play background music" type="button">
-    ♪
-</button>
+        <div class="intro-glow"></div>
 
-<style>
-    #musicButton {
-        position: fixed;
-        bottom: 25px;
-        right: 20px;
-        width: 48px;
-        height: 48px;
-        border: 1px solid #e8d8ca;
-        border-radius: 50%;
-        background: #fffaf5;
-        color: #80685b;
-        font-size: 23px;
-        box-shadow: 0 4px 15px rgba(70, 50, 35, 0.15);
-        cursor: pointer;
-        z-index: 9999;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
+        <div class="intro-content">
 
-    #musicButton.playing {
-        animation: musicPulse 2s infinite;
-    }
+            <p class="intro-small-text">
+                A LITTLE CELEBRATION OF LOVE
+            </p>
 
-    @keyframes musicPulse {
-        0%, 100% {
-            box-shadow: 0 4px 15px rgba(70, 50, 35, 0.15);
-        }
-        50% {
-            box-shadow: 0 4px 20px rgba(128, 104, 91, 0.4);
-        }
-    }
-</style>
+            <h1 class="intro-names">
+                Faris Azri
+            </h1>
 
-<script>
-    const weddingMusic = document.getElementById("weddingMusic");
-    const musicButton = document.getElementById("musicButton");
+            <div class="intro-ampersand">&</div>
 
-    async function playWeddingMusic() {
-        try {
-            await weddingMusic.play();
-            musicButton.textContent = "Ⅱ";
-            musicButton.classList.add("playing");
-            musicButton.setAttribute("aria-label", "Pause background music");
-        } catch (error) {
-            musicButton.textContent = "♪";
-            musicButton.classList.remove("playing");
-            musicButton.setAttribute("aria-label", "Play background music");
-        }
-    }
+            <h1 class="intro-names">
+                Maisura
+            </h1>
 
-    musicButton.addEventListener("click", async () => {
-        if (weddingMusic.paused) {
-            await playWeddingMusic();
-        } else {
-            weddingMusic.pause();
-            musicButton.textContent = "♪";
-            musicButton.classList.remove("playing");
-            musicButton.setAttribute("aria-label", "Play background music");
-        }
-    });
+            <div class="intro-divider"></div>
 
-    // Attempt autoplay when the page opens
-    playWeddingMusic();
-</script>
+            <p class="intro-small-text">
+                TOGETHER WITH LOVE
+            </p>
 
+            <button id="enterWeddingButton" type="button">
+                ENTER OUR WEDDING
+            </button>
 
-<div class="container">
+        </div>
 
-    <h1 class="couple-names">Faris & Maisura</h1>
+        <div class="intro-door door-left"></div>
+        <div class="intro-door door-right"></div>
 
-    <h2>Our Wedding Memories ♡︎</h2>
+    </div>
 
-    <p class="intro">
-        Capture a little moment from our special day
-        and share it with us.
-    </p>
+    <!-- BACKGROUND MUSIC -->
 
+    <audio id="weddingMusic" loop preload="auto">
+        <source src="wedding-music.mp3.mp3" type="audio/mpeg">
+    </audio>
 
-    <div class="upload-box">
+    <button id="musicButton" aria-label="Play background music" type="button">
+        ♪
+    </button>
 
-        <input
-            type="file"
-            id="photo"
-            accept="image/*"
-            multiple
-        >
+    <!-- MAIN WEBSITE -->
 
-        <br>
+    <div class="container">
 
-        <button id="uploadButton">
-    Upload Photo
-</button>
+        <h1 class="couple-names">Faris & Maisura</h1>
 
-<div id="status"></div>
+        <h2>Our Wedding Memories ♡︎</h2>
 
-<button
-    id="undoUpload"
-    type="button"
->
-    Undo Upload
-</button>
-
-<div
-    id="uploadConfirmation"
-    class="upload-confirmation"
->
-
-    <div class="confirmation-box">
-
-        <p>
-            Confirm to share photos?
+        <p class="intro">
+            Capture a little moment from our special day
+            and share it with us.
         </p>
 
-        <div class="confirmation-buttons">
+        <!-- PHOTO UPLOAD -->
 
-            <button
-                id="cancelUpload"
-                type="button"
+        <div class="upload-box">
+
+            <input
+                type="file"
+                id="photo"
+                accept="image/*"
+                multiple
             >
-                Cancel
+
+            <br>
+
+            <button id="uploadButton" type="button">
+                Upload Photo
             </button>
 
-            <button
-                id="confirmUpload"
-                type="button"
-            >
-                Confirm
+            <div id="status"></div>
+
+            <button id="undoUpload" type="button">
+                Undo Upload
             </button>
+
+            <div id="uploadConfirmation" class="upload-confirmation">
+
+                <div class="confirmation-box">
+
+                    <p>Confirm to share photos?</p>
+
+                    <div class="confirmation-buttons">
+
+                        <button id="cancelUpload" type="button">
+                            Cancel
+                        </button>
+
+                        <button id="confirmUpload" type="button">
+                            Confirm
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
 
         </div>
 
-    </div>
+        <!-- PHOTO GALLERY -->
 
-</div>
+        <h2 class="gallery-title">
+            Moments From Our Day
+        </h2>
 
-    </div>
-
-
-    <h2 class="gallery-title">
-        Moments From Our Day
-    </h2>
-
-
-   <div
-    id="gallery"
-    class="gallery"
-></div>
-
-<button
-    id="showMoreButton"
-    class="show-more-button"
-    type="button"
->
-    ↓
-    <span>See Other Photos</span>
-</button>
-    <section class="wishes-section">
-
-    
-<section class="wishes-section">
-
-    <h2 class="gallery-title">
-        Leave a Little Wish
-    </h2>
-
-    <p class="wishes-intro">
-        Leave a little note for Faris & Maisura ♡︎
-    </p>
-
-    <form id="wishForm">
-
-        <input
-            type="text"
-            id="wishName"
-            placeholder="Your name (optional)"
-        >
-
-        <textarea
-            id="wishMessage"
-            placeholder="Write your wish here..."
-            rows="5"
-            required
-        ></textarea>
-
-        <label class="anonymous-option">
-            <input
-                type="checkbox"
-                id="anonymousWish"
-            >
-            Send anonymously
-        </label>
+        <div id="gallery" class="gallery"></div>
 
         <button
-            type="submit"
-            id="wishSubmitButton"
+            id="showMoreButton"
+            class="show-more-button"
+            type="button"
         >
-            Send Your Wish
+            ↓ <span>See Other Photos</span>
         </button>
 
-        <p id="wishStatus"></p>
+        <!-- WISH SUBMISSION -->
 
-    </form>
+        <section class="wishes-section">
 
-</section>
+            <h2 class="gallery-title">
+                Leave a Little Wish
+            </h2>
 
-    <section class="wish-display-section">
-
-    <h2 class="gallery-title">
-        A Little Note For You
-    </h2>
-
-    <div id="wishCardContainer" class="wish-card-container">
-        <div class="wish-card">
-            <p class="wish-card-message">
-                Loading little notes... ♡︎
+            <p class="wishes-intro">
+                Leave a little note for Faris & Maisura ♡︎
             </p>
+
+            <form id="wishForm">
+
+                <input
+                    type="text"
+                    id="wishName"
+                    placeholder="Your name (optional)"
+                >
+
+                <textarea
+                    id="wishMessage"
+                    placeholder="Write your wish here..."
+                    rows="5"
+                    required
+                ></textarea>
+
+                <label class="anonymous-option">
+                    <input
+                        type="checkbox"
+                        id="anonymousWish"
+                    >
+                    Send anonymously
+                </label>
+
+                <button
+                    type="submit"
+                    id="wishSubmitButton"
+                >
+                    Send Your Wish
+                </button>
+
+                <p id="wishStatus"></p>
+
+            </form>
+
+        </section>
+
+        <!-- WISH DISPLAY -->
+
+        <section class="wish-display-section">
+
+            <h2 class="gallery-title">
+                A Little Note For You
+            </h2>
+
+            <div id="wishCardContainer" class="wish-card-container">
+
+                <div class="wish-card">
+                    <p class="wish-card-message">
+                        Loading little notes... ♡︎
+                    </p>
+                </div>
+
+            </div>
+
+            <div id="wishDots" class="wish-dots"></div>
+
+        </section>
+
+    </div>
+
+    <!-- FULL-SCREEN PHOTO VIEWER -->
+
+    <div id="lightbox" class="lightbox">
+
+        <button
+            id="prevButton"
+            class="nav-button prev-button"
+            aria-label="Previous photo"
+            type="button"
+        >
+            ‹
+        </button>
+
+        <div id="photoCounter" class="photo-counter">
+            1 / 1
         </div>
+
+        <button
+            id="nextButton"
+            class="nav-button next-button"
+            aria-label="Next photo"
+            type="button"
+        >
+            ›
+        </button>
+
+        <button
+            id="closeButton"
+            class="close-button"
+            aria-label="Close"
+            type="button"
+        >
+            ×
+        </button>
+
+        <img
+            id="lightboxImage"
+            class="lightbox-content"
+            alt="Wedding photo"
+        >
+
+        <button
+            id="downloadButton"
+            class="download-button"
+            type="button"
+        >
+            ↓ Save Photo
+        </button>
+
     </div>
 
-    <div
-        id="wishDots"
-        class="wish-dots"
-    ></div>
+    <!-- FLOATING BUTTERFLIES -->
 
-</section>
-
-</div>
-
-
-<!-- Full-screen photo viewer -->
-
-<div
-    id="lightbox"
-    class="lightbox"
->
-
-    <button
-        id="prevButton"
-        class="nav-button prev-button"
-        aria-label="Previous photo"
-    >
-        ‹
-    </button>
-
-    <div
-        id="photoCounter"
-        class="photo-counter"
-    >
-        1 / 1
+    <div class="butterfly butterfly-one">
+        <svg class="butterfly-svg" viewBox="0 0 100 100">
+            <g class="butterfly-wing-left">
+                <path class="butterfly-upper"
+                    d="M50 48 C38 12 8 8 10 35 C11 48 31 54 50 52 Z"/>
+                <path class="butterfly-lower"
+                    d="M49 52 C24 48 15 67 27 80 C38 88 47 67 50 55 Z"/>
+            </g>
+            <g class="butterfly-wing-right">
+                <path class="butterfly-upper"
+                    d="M50 48 C62 12 92 8 90 35 C89 48 69 54 50 52 Z"/>
+                <path class="butterfly-lower"
+                    d="M51 52 C76 48 85 67 73 80 C62 88 53 67 50 55 Z"/>
+            </g>
+            <path class="butterfly-body"
+                d="M48 35 Q50 30 52 35 L53 68 Q50 76 47 68 Z"/>
+            <path d="M49 35 Q40 20 36 24 M51 35 Q60 20 64 24"
+                fill="none" stroke="#b99aba" stroke-width="1.5"
+                stroke-linecap="round"/>
+        </svg>
     </div>
 
-    <button
-        id="nextButton"
-        class="nav-button next-button"
-        aria-label="Next photo"
-    >
-        ›
-    </button>
+    <div class="butterfly butterfly-two">
+        <svg class="butterfly-svg" viewBox="0 0 100 100">
+            <g class="butterfly-wing-left">
+                <path class="butterfly-upper"
+                    d="M50 48 C38 12 8 8 10 35 C11 48 31 54 50 52 Z"/>
+                <path class="butterfly-lower"
+                    d="M49 52 C24 48 15 67 27 80 C38 88 47 67 50 55 Z"/>
+            </g>
+            <g class="butterfly-wing-right">
+                <path class="butterfly-upper"
+                    d="M50 48 C62 12 92 8 90 35 C89 48 69 54 50 52 Z"/>
+                <path class="butterfly-lower"
+                    d="M51 52 C76 48 85 67 73 80 C62 88 53 67 50 55 Z"/>
+            </g>
+            <path class="butterfly-body"
+                d="M48 35 Q50 30 52 35 L53 68 Q50 76 47 68 Z"/>
+            <path d="M49 35 Q40 20 36 24 M51 35 Q60 20 64 24"
+                fill="none" stroke="#b99aba" stroke-width="1.5"
+                stroke-linecap="round"/>
+        </svg>
+    </div>
 
-    <button
-        id="closeButton"
-        class="close-button"
-        aria-label="Close"
-    >
-        ×
-    </button>
+    <div class="butterfly butterfly-three">
+        <svg class="butterfly-svg" viewBox="0 0 100 100">
+            <g class="butterfly-wing-left">
+                <path class="butterfly-upper"
+                    d="M50 48 C38 12 8 8 10 35 C11 48 31 54 50 52 Z"/>
+                <path class="butterfly-lower"
+                    d="M49 52 C24 48 15 67 27 80 C38 88 47 67 50 55 Z"/>
+            </g>
+            <g class="butterfly-wing-right">
+                <path class="butterfly-upper"
+                    d="M50 48 C62 12 92 8 90 35 C89 48 69 54 50 52 Z"/>
+                <path class="butterfly-lower"
+                    d="M51 52 C76 48 85 67 73 80 C62 88 53 67 50 55 Z"/>
+            </g>
+            <path class="butterfly-body"
+                d="M48 35 Q50 30 52 35 L53 68 Q50 76 47 68 Z"/>
+            <path d="M49 35 Q40 20 36 24 M51 35 Q60 20 64 24"
+                fill="none" stroke="#b99aba" stroke-width="1.5"
+                stroke-linecap="round"/>
+        </svg>
+    </div>
 
+    <!-- LITTLE SPARKLES -->
 
-    <img
-        id="lightboxImage"
-        class="lightbox-content"
-        alt="Wedding photo"
-    >
+    <div class="glitter glitter-one">✧</div>
+    <div class="glitter glitter-two">✦</div>
+    <div class="glitter glitter-three">✧</div>
 
+    <!-- MUSIC SCRIPT -->
 
-    <button
-    id="downloadButton"
-    class="download-button"
-    type="button"
->
-    ↓ Save Photo
-</button>
+    <script>
+        const weddingMusic =
+            document.getElementById("weddingMusic");
 
-</div>
+        const musicButton =
+            document.getElementById("musicButton");
 
+        async function playWeddingMusic() {
+            try {
+                await weddingMusic.play();
 
-<script>
+                musicButton.textContent = "Ⅱ";
+                musicButton.classList.add("playing");
+                musicButton.setAttribute(
+                    "aria-label",
+                    "Pause background music"
+                );
 
+            } catch (error) {
 
-const SUPABASE_URL =
-    "https://bifsngoytsdmbslzmkyo.supabase.co";
+                musicButton.textContent = "♪";
+                musicButton.classList.remove("playing");
+                musicButton.setAttribute(
+                    "aria-label",
+                    "Play background music"
+                );
 
-
-const SUPABASE_PUBLISHABLE_KEY =
-    "sb_publishable_v7LqDPohz2SdwOgWikvspg_9Zswa7xn";
-
-
-const supabaseClient =
-    window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_PUBLISHABLE_KEY
-    );
-
-
-/* PHOTO COMPRESSION */
-
-async function compressPhoto(file) {
-
-    // Keep animated GIFs unchanged
-    if (file.type === "image/gif" ||
-        file.type === "image/svg+xml") {
-        return file;
-    }
-
-    // Keep already-small photos unchanged
-    if (file.size <= 1.5 * 1024 * 1024) {
-        return file;
-    }
-
-    try {
-
-        const imageURL = URL.createObjectURL(file);
-        const image = new Image();
-
-        image.src = imageURL;
-
-        await image.decode();
-
-        const maxSize = 2000;
-
-        const scale = Math.min(
-            1,
-            maxSize / Math.max(
-                image.naturalWidth,
-                image.naturalHeight
-            )
-        );
-
-        const canvas = document.createElement("canvas");
-
-        canvas.width = Math.round(
-            image.naturalWidth * scale
-        );
-
-        canvas.height = Math.round(
-            image.naturalHeight * scale
-        );
-
-        const context = canvas.getContext("2d");
-
-        context.drawImage(
-            image,
-            0,
-            0,
-            canvas.width,
-            canvas.height
-        );
-
-        URL.revokeObjectURL(imageURL);
-
-        const compressedBlob = await new Promise(resolve => {
-
-            canvas.toBlob(
-                resolve,
-                "image/jpeg",
-                0.90
-            );
-
-        });
-
-        if (!compressedBlob ||
-            compressedBlob.size >= file.size) {
-            return file;
-        }
-
-        const fileName =
-            file.name.replace(/\.[^/.]+$/, "") + ".jpg";
-
-        return new File(
-            [compressedBlob],
-            fileName,
-            {
-                type: "image/jpeg",
-                lastModified: Date.now()
             }
-        );
-
-    } catch (error) {
-
-        console.warn(
-            "Compression unavailable. Using original photo.",
-            error
-        );
-
-        return file;
-
-    }
-
-}
-
-const uploadButton =
-    document.getElementById("uploadButton");
-const undoUpload =
-    document.getElementById("undoUpload");
-
-let lastUploadedFiles = [];
-
-const photoInput =
-    document.getElementById("photo");
-
-
-const status =
-    document.getElementById("status");
-
-
-const gallery =
-    document.getElementById("gallery");
-
-
-const lightbox =
-    document.getElementById("lightbox");
-
-
-const lightboxImage =
-    document.getElementById("lightboxImage");
-
-
-const closeButton =
-    document.getElementById("closeButton");
-
-
-const downloadButton =
-    document.getElementById("downloadButton");
-const prevButton =
-    document.getElementById("prevButton");
-
-const nextButton =
-    document.getElementById("nextButton");
-
-const photoCounter =
-    document.getElementById("photoCounter");
-
-let galleryPhotos = [];
-let currentPhotoIndex = 0;
-
-
-async function loadGallery() {
-
-    gallery.innerHTML = "";
-
-    const { data, error } =
-        await supabaseClient
-            .storage
-            .from("wedding-photos")
-            .list("", {
-                limit: 100,
-                sortBy: {
-                    column: "created_at",
-                    order: "desc"
-                }
-            });
-
-
-    if (error) {
-
-        console.error(error);
-
-        gallery.innerHTML =
-            "<p>Unable to load gallery.</p>";
-
-        return;
-    }
-
-galleryPhotos = data.filter(file => file.name);
-    data.forEach((file, index) => {
-
-    if (!file.name) return;
-
-    const {
-        data: publicUrlData
-    } =
-        supabaseClient
-            .storage
-            .from("wedding-photos")
-            .getPublicUrl(file.name);
-
-    const img =
-        document.createElement("img");
-
-    img.src =
-        publicUrlData.publicUrl;
-
-    img.loading =
-        "lazy";
-
-    if (index >= 8) {
-    img.style.display = "none";
-}
-
-    img.addEventListener(
-        "click",
-        () => {
-
-            currentPhotoIndex =
-                galleryPhotos.findIndex(
-                    photo =>
-                        photo.name === file.name
-                );
-
-            showPhoto(currentPhotoIndex);
-
-            lightbox.classList.add(
-                "active"
-            );
         }
-    );
 
-    gallery.appendChild(img);
-});
+        musicButton.addEventListener("click", async () => {
 
-}
+            if (weddingMusic.paused) {
 
-
-function showPhoto(index) {
-
-    if (!galleryPhotos.length) return;
-
-    if (index < 0) {
-        index = galleryPhotos.length - 1;
-    }
-
-    if (index >= galleryPhotos.length) {
-        index = 0;
-    }
-
-    currentPhotoIndex = index;
-
-    const file = galleryPhotos[currentPhotoIndex];
-
-    const {
-        data: publicUrlData
-    } =
-        supabaseClient
-            .storage
-            .from("wedding-photos")
-            .getPublicUrl(file.name);
-
-    lightboxImage.src =
-        publicUrlData.publicUrl;
-
-    downloadButton.dataset.url =
-    publicUrlData.publicUrl;
-
-downloadButton.dataset.filename =
-    file.name;
-
-    photoCounter.textContent =
-        (currentPhotoIndex + 1) +
-        " / " +
-        galleryPhotos.length;
-}
-function closeLightbox() {
-
-    lightbox.classList.remove("active");
-
-    lightboxImage.src = "";
-
-}
-
-
-
-closeButton.addEventListener(
-    "click",
-    closeLightbox
-);
-prevButton.addEventListener(
-    "click",
-    () => {
-        showPhoto(currentPhotoIndex - 1);
-    }
-);
-
-nextButton.addEventListener(
-    "click",
-    () => {
-        showPhoto(currentPhotoIndex + 1);
-    }
-);
-let touchStartX = 0;
-let touchEndX = 0;
-
-lightbox.addEventListener(
-    "touchstart",
-    (event) => {
-        touchStartX = event.changedTouches[0].screenX;
-    },
-    { passive: true }
-);
-downloadButton.addEventListener(
-    "click",
-    async () => {
-
-        const url =
-            downloadButton.dataset.url;
-
-        const filename =
-            downloadButton.dataset.filename;
-
-        if (!url) return;
-
-        try {
-
-            const response =
-                await fetch(url);
-
-            const blob =
-                await response.blob();
-
-            const file =
-                new File(
-                    [blob],
-                    filename,
-                    {
-                        type: blob.type
-                    }
-                );
-
-            if (
-                navigator.share &&
-                navigator.canShare &&
-                navigator.canShare({
-                    files: [file]
-                })
-            ) {
-
-                await navigator.share({
-                    files: [file],
-                    title: "Wedding Photo"
-                });
+                await playWeddingMusic();
 
             } else {
 
-                const link =
-                    document.createElement("a");
-
-                link.href =
-                    URL.createObjectURL(blob);
-
-                link.download =
-                    filename;
-
-                document.body.appendChild(link);
-
-                link.click();
-
-                link.remove();
-
-                URL.revokeObjectURL(
-                    link.href
+                weddingMusic.pause();
+                musicButton.textContent = "♪";
+                musicButton.classList.remove("playing");
+                musicButton.setAttribute(
+                    "aria-label",
+                    "Play background music"
                 );
 
             }
 
-        } catch (error) {
+        });
 
-            console.error(error);
+        playWeddingMusic();
+    </script>
+
+    <!-- MAIN JAVASCRIPT -->
+
+    <script>
+        const SUPABASE_URL =
+            "https://bifsngoytsdmbslzmkyo.supabase.co";
+
+        const SUPABASE_PUBLISHABLE_KEY =
+            "sb_publishable_v7LqDPohz2SdwOgWikvspg_9Zswa7xn";
+
+        const supabaseClient =
+            window.supabase.createClient(
+                SUPABASE_URL,
+                SUPABASE_PUBLISHABLE_KEY
+            );
+
+        /* PHOTO COMPRESSION */
+
+        async function compressPhoto(file) {
+
+            if (
+                file.type === "image/gif" ||
+                file.type === "image/svg+xml"
+            ) {
+                return file;
+            }
+
+            if (file.size <= 1.5 * 1024 * 1024) {
+                return file;
+            }
+
+            let imageURL;
+
+            try {
+
+                imageURL = URL.createObjectURL(file);
+
+                const image = new Image();
+                image.src = imageURL;
+
+                await image.decode();
+
+                const maxSize = 2000;
+
+                const scale = Math.min(
+                    1,
+                    maxSize / Math.max(
+                        image.naturalWidth,
+                        image.naturalHeight
+                    )
+                );
+
+                const canvas =
+                    document.createElement("canvas");
+
+                canvas.width = Math.round(
+                    image.naturalWidth * scale
+                );
+
+                canvas.height = Math.round(
+                    image.naturalHeight * scale
+                );
+
+                const context =
+                    canvas.getContext("2d");
+
+                // White background prevents transparent PNG
+                // areas from turning black during JPEG conversion.
+                context.fillStyle = "#ffffff";
+                context.fillRect(
+                    0,
+                    0,
+                    canvas.width,
+                    canvas.height
+                );
+
+                context.drawImage(
+                    image,
+                    0,
+                    0,
+                    canvas.width,
+                    canvas.height
+                );
+
+                const compressedBlob =
+                    await new Promise(resolve => {
+
+                        canvas.toBlob(
+                            resolve,
+                            "image/jpeg",
+                            0.90
+                        );
+
+                    });
+
+                if (
+                    !compressedBlob ||
+                    compressedBlob.size >= file.size
+                ) {
+                    return file;
+                }
+
+                const fileName =
+                    file.name.replace(/\.[^/.]+$/, "") + ".jpg";
+
+                return new File(
+                    [compressedBlob],
+                    fileName,
+                    {
+                        type: "image/jpeg",
+                        lastModified: Date.now()
+                    }
+                );
+
+            } catch (error) {
+
+                console.warn(
+                    "Compression unavailable. Using original photo.",
+                    error
+                );
+
+                return file;
+
+            } finally {
+
+                if (imageURL) {
+                    URL.revokeObjectURL(imageURL);
+                }
+
+            }
+        }
+
+        /* ELEMENT REFERENCES */
+
+        const uploadButton =
+            document.getElementById("uploadButton");
+
+        const undoUpload =
+            document.getElementById("undoUpload");
+
+        const uploadConfirmation =
+            document.getElementById("uploadConfirmation");
+
+        const cancelUpload =
+            document.getElementById("cancelUpload");
+
+        const confirmUpload =
+            document.getElementById("confirmUpload");
+
+        const photoInput =
+            document.getElementById("photo");
+
+        const status =
+            document.getElementById("status");
+
+        const gallery =
+            document.getElementById("gallery");
+
+        const lightbox =
+            document.getElementById("lightbox");
+
+        const lightboxImage =
+            document.getElementById("lightboxImage");
+
+        const closeButton =
+            document.getElementById("closeButton");
+
+        const downloadButton =
+            document.getElementById("downloadButton");
+
+        const prevButton =
+            document.getElementById("prevButton");
+
+        const nextButton =
+            document.getElementById("nextButton");
+
+        const photoCounter =
+            document.getElementById("photoCounter");
+
+        let lastUploadedFiles = [];
+        let galleryPhotos = [];
+        let currentPhotoIndex = 0;
+
+        /* LOAD GALLERY */
+
+        async function loadGallery() {
+
+            gallery.innerHTML = "";
+
+            const { data, error } =
+                await supabaseClient
+                    .storage
+                    .from("wedding-photos")
+                    .list("", {
+                        limit: 100,
+                        sortBy: {
+                            column: "created_at",
+                            order: "desc"
+                        }
+                    });
+
+            if (error) {
+
+                console.error(error);
+
+                gallery.innerHTML =
+                    "<p>Unable to load gallery.</p>";
+
+                return;
+            }
+
+            galleryPhotos =
+                data.filter(file => file.name);
+
+            galleryPhotos.forEach((file, index) => {
+
+                const { data: publicUrlData } =
+                    supabaseClient
+                        .storage
+                        .from("wedding-photos")
+                        .getPublicUrl(file.name);
+
+                const img =
+                    document.createElement("img");
+
+                img.src = publicUrlData.publicUrl;
+                img.loading = "lazy";
+                img.alt = "Wedding photo";
+
+                if (index >= 8) {
+                    img.style.display = "none";
+                }
+
+                img.addEventListener("click", () => {
+
+                    currentPhotoIndex = index;
+
+                    showPhoto(currentPhotoIndex);
+
+                    lightbox.classList.add("active");
+
+                });
+
+                gallery.appendChild(img);
+
+            });
 
         }
 
-    }
-);
-lightbox.addEventListener(
-    "touchend",
-    (event) => {
+        /* PHOTO VIEWER */
 
-        touchEndX =
-            event.changedTouches[0].screenX;
+        function showPhoto(index) {
 
-        const swipeDistance =
-            touchEndX - touchStartX;
+            if (!galleryPhotos.length) return;
 
-        if (Math.abs(swipeDistance) < 50) {
-            return;
-        }
+            if (index < 0) {
+                index = galleryPhotos.length - 1;
+            }
 
-        if (swipeDistance < 0) {
-            showPhoto(currentPhotoIndex + 1);
-        } else {
-            showPhoto(currentPhotoIndex - 1);
-        }
+            if (index >= galleryPhotos.length) {
+                index = 0;
+            }
 
-    },
-    { passive: true }
-);
+            currentPhotoIndex = index;
 
-lightbox.addEventListener(
-    "click",
-    (event) => {
+            const file = galleryPhotos[currentPhotoIndex];
 
-        if (
-            event.target === lightbox
-        ) {
+            const { data: publicUrlData } =
+                supabaseClient
+                    .storage
+                    .from("wedding-photos")
+                    .getPublicUrl(file.name);
 
-            closeLightbox();
+            lightboxImage.src =
+                publicUrlData.publicUrl;
 
-        }
+            downloadButton.dataset.url =
+                publicUrlData.publicUrl;
 
-    }
-);
-
-
-
-document.addEventListener(
-    "keydown",
-    (event) => {
-
-        if (
-            event.key === "Escape"
-        ) {
-
-            closeLightbox();
-
-        }
-
-    }
-);
-
-
-
-uploadButton.addEventListener(
-    "click",
-    () => {
-
-        const files =
-            Array.from(photoInput.files);
-
-        if (!files.length) {
-
-            status.textContent =
-                "Please choose at least one photo.";
-
-            return;
-
-        }
-
-        uploadConfirmation.classList.add(
-            "active"
-        );
-
-    }
-);
-
-
-cancelUpload.addEventListener(
-    "click",
-    () => {
-
-        uploadConfirmation.classList.remove(
-            "active"
-        );
-
-    }
-);
-
-
-confirmUpload.addEventListener(
-    "click",
-    async () => {
-
-        uploadConfirmation.classList.remove(
-            "active"
-        );
-
-        const files =
-            Array.from(photoInput.files);
-
-        if (!files.length) {
-            return;
-        }
-
-        uploadButton.disabled = true;
-        confirmUpload.disabled = true;
-
-        lastUploadedFiles = [];
-
-        for (let i = 0; i < files.length; i++) {
-
-    const originalFile = files[i];
-
-    status.textContent =
-        "Preparing photo " +
-        (i + 1) +
-        " of " +
-        files.length +
-        "...";
-
-    const file = await compressPhoto(originalFile);
-
-            status.textContent =
-                "Uploading " +
-                (i + 1) +
-                " of " +
-                files.length +
-                "...";
-
-            const fileName =
-                Date.now() +
-                "-" +
-                Math.random()
-                    .toString(36)
-                    .substring(2) +
-                "-" +
+            downloadButton.dataset.filename =
                 file.name;
 
-            const { error } =
-                await supabaseClient
-                    .storage
-                    .from("wedding-photos")
-                    .upload(
-                        fileName,
-                        file
-                    );
+            photoCounter.textContent =
+                (currentPhotoIndex + 1) +
+                " / " +
+                galleryPhotos.length;
 
-            if (error) {
-
-                console.error(error);
-
-                status.textContent =
-                    "Upload failed: " +
-                    error.message;
-
-                uploadButton.disabled =
-                    false;
-
-                confirmUpload.disabled =
-                    false;
-
-                return;
-            }
-
-            lastUploadedFiles.push(
-                fileName
-            );
         }
 
-        status.textContent =
-            files.length +
-            " photo" +
-            (files.length === 1 ? "" : "s") +
-            " uploaded successfully 🤍";
+        function closeLightbox() {
 
-        undoUpload.classList.add(
-            "active"
-        );
+            lightbox.classList.remove("active");
+            lightboxImage.src = "";
 
-        uploadButton.disabled =
-            false;
-
-        confirmUpload.disabled =
-            false;
-
-        photoInput.value =
-            "";
-
-        await loadGallery();
-
-    }
-);
-
-
-undoUpload.addEventListener(
-    "click",
-    async () => {
-
-        if (!lastUploadedFiles.length) {
-            return;
         }
 
-        const confirmed =
-            window.confirm(
-                "Remove these uploaded photos?"
-            );
-
-        if (!confirmed) {
-            return;
-        }
-
-        undoUpload.disabled = true;
-
-        status.textContent =
-            "Removing uploaded photos...";
-
-        for (
-            const fileName
-            of lastUploadedFiles
-        ) {
-
-            const { error } =
-                await supabaseClient
-                    .storage
-                    .from("wedding-photos")
-                    .remove([
-                        fileName
-                    ]);
-
-            if (error) {
-
-                console.error(error);
-
-                status.textContent =
-                    "Unable to remove photo.";
-
-                undoUpload.disabled =
-                    false;
-
-                return;
-            }
-        }
-
-        lastUploadedFiles = [];
-
-        undoUpload.classList.remove(
-            "active"
-        );
-
-        undoUpload.disabled =
-            false;
-
-        status.textContent =
-            "Upload removed.";
-
-        await loadGallery();
-
-    }
-);
-
-loadGallery();
-
-const showMoreButton =
-    document.getElementById("showMoreButton");
-
-let galleryExpanded = false;
-
-showMoreButton.addEventListener("click", () => {
-
-    const allPhotos =
-        gallery.querySelectorAll("img");
-
-    galleryExpanded = !galleryExpanded;
-
-    allPhotos.forEach((photo, index) => {
-
-        if (index >= 8) {
-            photo.style.display =
-                galleryExpanded ? "block" : "none";
-        }
-
-    });
-
-    if (galleryExpanded) {
-        showMoreButton.innerHTML =
-            '↑ <span>Show Less</span>';
-    } else {
-        showMoreButton.innerHTML =
-            '↓ <span>See Other Photos</span>';
-    }
-
-});
-
-/* WISHES */
-
-const wishForm =
-    document.getElementById("wishForm");
-
-const wishName =
-    document.getElementById("wishName");
-
-const anonymousWish =
-    document.getElementById("anonymousWish");
-
-const wishMessage =
-    document.getElementById("wishMessage");
-
-const wishSubmitButton =
-    document.getElementById("wishSubmitButton");
-
-const wishStatus =
-    document.getElementById("wishStatus");
-
-
-wishForm.addEventListener(
-    "submit",
-    async (event) => {
-
-        event.preventDefault();
-
-        wishSubmitButton.disabled = true;
-
-        wishStatus.textContent =
-            "Sending your wish...";
-
-        const name =
-            anonymousWish.checked
-                ? "Anonymous"
-                : wishName.value.trim();
-
-        const message =
-            wishMessage.value.trim();
-
-        const { error } =
-            await supabaseClient
-                .from("wishes")
-                .insert([
-                    {
-                        name:
-                            name || "Anonymous",
-                        message:
-                            message
-                    }
-                ]);
-
-        if (error) {
-
-            console.error(error);
-
-            wishStatus.textContent =
-                "Something went wrong. Please try again.";
-
-            wishSubmitButton.disabled =
-                false;
-
-            return;
-        }
-
-        wishStatus.textContent =
-            "Your wish has been sent 🤍";
-
-        wishForm.reset();
-
-        wishSubmitButton.disabled =
-            false;
-
-    }
-);
-/* DISPLAY WISHES */
-
-const wishCardContainer =
-    document.getElementById("wishCardContainer");
-
-const wishDots =
-    document.getElementById("wishDots");
-
-let wishes = [];
-let currentWishIndex = 0;
-let wishAutoSlide;
-
-
-async function loadWishes() {
-
-    const { data, error } =
-        await supabaseClient
-            .from("wishes")
-            .select("*")
-            .order("created_at", {
-                ascending: true
-            });
-
-    if (error) {
-
-        console.error(error);
-
-        wishCardContainer.innerHTML =
-            `
-            <div class="wish-card">
-                <p class="wish-card-message">
-                    Unable to load wishes 🤍
-                </p>
-            </div>
-            `;
-
-        return;
-    }
-
-    if (!data || !data.length) {
-
-        wishCardContainer.innerHTML =
-            `
-            <div class="wish-card">
-                <p class="wish-card-message">
-                    Be the first to leave a little wish 🤍
-                </p>
-            </div>
-            `;
-
-        return;
-    }
-
-    wishes = data;
-
-    wishCardContainer.innerHTML = "";
-    wishDots.innerHTML = "";
-
-    wishes.forEach((wish, index) => {
-
-        const card =
-            document.createElement("div");
-
-        card.className = "wish-card";
-
-        card.innerHTML =
-            `
-            <p class="wish-card-message">
-                ${wish.message}
-            </p>
-
-            <p class="wish-card-name">
-                — ${wish.name || "Anonymous"}
-            </p>
-            `;
-
-        wishCardContainer.appendChild(card);
-
-
-        const dot =
-            document.createElement("span");
-
-        dot.className = "wish-dot";
-
-        dot.addEventListener(
+        closeButton.addEventListener(
             "click",
-            () => {
-                showWish(index);
-                restartWishAutoSlide();
-            }
+            closeLightbox
         );
 
-        wishDots.appendChild(dot);
+        prevButton.addEventListener("click", () => {
+            showPhoto(currentPhotoIndex - 1);
+        });
 
-    });
+        nextButton.addEventListener("click", () => {
+            showPhoto(currentPhotoIndex + 1);
+        });
 
-    showWish(0);
+        let touchStartX = 0;
+        let touchEndX = 0;
 
-    startWishAutoSlide();
-
-}
-
-
-function showWish(index) {
-
-    if (!wishes.length) return;
-
-    if (index < 0) {
-        index = wishes.length - 1;
-    }
-
-    if (index >= wishes.length) {
-        index = 0;
-    }
-
-    currentWishIndex = index;
-
-    const cards =
-        wishCardContainer.querySelectorAll(
-            ".wish-card"
+        lightbox.addEventListener(
+            "touchstart",
+            event => {
+                touchStartX =
+                    event.changedTouches[0].screenX;
+            },
+            { passive: true }
         );
 
-    const dots =
-        wishDots.querySelectorAll(
-            ".wish-dot"
-        );
+        lightbox.addEventListener(
+            "touchend",
+            event => {
 
-    cards.forEach((card, cardIndex) => {
+                touchEndX =
+                    event.changedTouches[0].screenX;
 
-        card.style.display =
-            cardIndex === currentWishIndex
-                ? "flex"
-                : "none";
+                const swipeDistance =
+                    touchEndX - touchStartX;
 
-    });
+                if (Math.abs(swipeDistance) < 50) {
+                    return;
+                }
 
-    dots.forEach((dot, dotIndex) => {
-
-        dot.classList.toggle(
-            "active",
-            dotIndex === currentWishIndex
-        );
-
-    });
-
-}
-
-
-function startWishAutoSlide() {
-
-    clearInterval(wishAutoSlide);
-
-    wishAutoSlide =
-        setInterval(
-            () => {
-
-                showWish(
-                    currentWishIndex + 1
-                );
+                if (swipeDistance < 0) {
+                    showPhoto(currentPhotoIndex + 1);
+                } else {
+                    showPhoto(currentPhotoIndex - 1);
+                }
 
             },
-            5500
+            { passive: true }
         );
 
-}
+        lightbox.addEventListener("click", event => {
 
+            if (event.target === lightbox) {
+                closeLightbox();
+            }
 
-function restartWishAutoSlide() {
+        });
 
-    startWishAutoSlide();
+        document.addEventListener("keydown", event => {
 
-}
+            if (event.key === "Escape") {
+                closeLightbox();
+            }
 
+        });
 
-/* Swipe */
+        /* DOWNLOAD / SHARE PHOTO */
 
-let wishTouchStartX = 0;
-let wishTouchEndX = 0;
+        downloadButton.addEventListener(
+            "click",
+            async () => {
 
+                const url =
+                    downloadButton.dataset.url;
 
-wishCardContainer.addEventListener(
-    "touchstart",
-    (event) => {
+                const filename =
+                    downloadButton.dataset.filename;
 
-        wishTouchStartX =
-            event.changedTouches[0].screenX;
+                if (!url) return;
 
-    },
-    { passive: true }
-);
+                try {
 
+                    const response = await fetch(url);
+                    const blob = await response.blob();
 
-wishCardContainer.addEventListener(
-    "touchend",
-    (event) => {
+                    const file = new File(
+                        [blob],
+                        filename,
+                        { type: blob.type }
+                    );
 
-        wishTouchEndX =
-            event.changedTouches[0].screenX;
+                    if (
+                        navigator.share &&
+                        navigator.canShare &&
+                        navigator.canShare({
+                            files: [file]
+                        })
+                    ) {
 
-        const swipeDistance =
-            wishTouchEndX -
-            wishTouchStartX;
+                        await navigator.share({
+                            files: [file],
+                            title: "Wedding Photo"
+                        });
 
-        if (
-            Math.abs(swipeDistance) < 50
-        ) {
-            return;
-        }
+                    } else {
 
-        if (swipeDistance < 0) {
+                        const objectURL =
+                            URL.createObjectURL(blob);
 
-            showWish(
-                currentWishIndex + 1
-            );
+                        const link =
+                            document.createElement("a");
 
-        } else {
+                        link.href = objectURL;
+                        link.download = filename;
 
-            showWish(
-                currentWishIndex - 1
-            );
+                        document.body.appendChild(link);
+                        link.click();
+                        link.remove();
 
-        }
+                        URL.revokeObjectURL(objectURL);
 
-        restartWishAutoSlide();
+                    }
 
-    },
-    { passive: true }
-);
+                } catch (error) {
 
+                    console.error(error);
 
-loadWishes();
-
-/* BUTTERFLY INTERACTION */
-
-document.querySelectorAll(".butterfly").forEach(butterfly => {
-
-    butterfly.addEventListener("click", () => {
-
-        if (butterfly.dataset.flying === "true") {
-            return;
-        }
-
-        butterfly.dataset.flying = "true";
-
-        butterfly.style.animation = "none";
-        butterfly.style.opacity = "1";
-
-        butterfly.animate(
-            [
-                {
-                    transform: "translate(0, 0) rotate(0deg) scale(1)",
-                    opacity: 1
-                },
-                {
-                    transform: "translate(35px, -70px) rotate(25deg) scale(1.1)",
-                    opacity: 1,
-                    offset: 0.4
-                },
-                {
-                    transform: "translate(100px, -180px) rotate(65deg) scale(0.3)",
-                    opacity: 0
                 }
-            ],
-            {
-                duration: 800,
-                easing: "ease-in",
-                fill: "forwards"
+
             }
         );
 
-        setTimeout(() => {
+        /* UPLOAD CONFIRMATION */
 
-            butterfly.getAnimations().forEach(animation => {
-                animation.cancel();
+        uploadButton.addEventListener("click", () => {
+
+            const files =
+                Array.from(photoInput.files);
+
+            if (!files.length) {
+
+                status.textContent =
+                    "Please choose at least one photo.";
+
+                return;
+            }
+
+            uploadConfirmation.classList.add("active");
+
+        });
+
+        cancelUpload.addEventListener("click", () => {
+
+            uploadConfirmation.classList.remove("active");
+
+        });
+
+        /* UPLOAD PHOTOS */
+
+        confirmUpload.addEventListener(
+            "click",
+            async () => {
+
+                uploadConfirmation.classList.remove("active");
+
+                const files =
+                    Array.from(photoInput.files);
+
+                if (!files.length) return;
+
+                uploadButton.disabled = true;
+                confirmUpload.disabled = true;
+
+                lastUploadedFiles = [];
+
+                for (let i = 0; i < files.length; i++) {
+
+                    const originalFile = files[i];
+
+                    status.textContent =
+                        "Preparing photo " +
+                        (i + 1) +
+                        " of " +
+                        files.length +
+                        "...";
+
+                    const file =
+                        await compressPhoto(originalFile);
+
+                    status.textContent =
+                        "Uploading " +
+                        (i + 1) +
+                        " of " +
+                        files.length +
+                        "...";
+
+                    const fileName =
+                        Date.now() +
+                        "-" +
+                        Math.random()
+                            .toString(36)
+                            .substring(2) +
+                        "-" +
+                        file.name;
+
+                    const { error } =
+                        await supabaseClient
+                            .storage
+                            .from("wedding-photos")
+                            .upload(fileName, file);
+
+                    if (error) {
+
+                        console.error(error);
+
+                        status.textContent =
+                            "Upload failed: " +
+                            error.message;
+
+                        uploadButton.disabled = false;
+                        confirmUpload.disabled = false;
+
+                        if (lastUploadedFiles.length) {
+                            undoUpload.classList.add("active");
+                        }
+
+                        return;
+                    }
+
+                    lastUploadedFiles.push(fileName);
+
+                }
+
+                status.textContent =
+                    files.length +
+                    " photo" +
+                    (files.length === 1 ? "" : "s") +
+                    " uploaded successfully 🤍";
+
+                undoUpload.classList.add("active");
+
+                uploadButton.disabled = false;
+                confirmUpload.disabled = false;
+
+                photoInput.value = "";
+
+                await loadGallery();
+
+            }
+        );
+
+        /* UNDO UPLOAD */
+
+        undoUpload.addEventListener(
+            "click",
+            async () => {
+
+                if (!lastUploadedFiles.length) {
+                    return;
+                }
+
+                const confirmed =
+                    window.confirm(
+                        "Remove these uploaded photos?"
+                    );
+
+                if (!confirmed) return;
+
+                undoUpload.disabled = true;
+
+                status.textContent =
+                    "Removing uploaded photos...";
+
+                const { error } =
+                    await supabaseClient
+                        .storage
+                        .from("wedding-photos")
+                        .remove(lastUploadedFiles);
+
+                if (error) {
+
+                    console.error(error);
+
+                    status.textContent =
+                        "Unable to remove photo.";
+
+                    undoUpload.disabled = false;
+
+                    return;
+                }
+
+                lastUploadedFiles = [];
+
+                undoUpload.classList.remove("active");
+                undoUpload.disabled = false;
+
+                status.textContent =
+                    "Upload removed.";
+
+                await loadGallery();
+
+            }
+        );
+
+        /* SHOW MORE PHOTOS */
+
+        const showMoreButton =
+            document.getElementById("showMoreButton");
+
+        let galleryExpanded = false;
+
+        showMoreButton.addEventListener("click", () => {
+
+            const allPhotos =
+                gallery.querySelectorAll("img");
+
+            galleryExpanded = !galleryExpanded;
+
+            allPhotos.forEach((photo, index) => {
+
+                if (index >= 8) {
+
+                    photo.style.display =
+                        galleryExpanded ? "block" : "none";
+
+                }
+
             });
 
-            butterfly.style.animation = "";
-            butterfly.style.opacity = "";
-            butterfly.style.transform = "";
+            if (galleryExpanded) {
 
-            delete butterfly.dataset.flying;
+                showMoreButton.innerHTML =
+                    '↑ <span>Show Less</span>';
 
-        }, 3000);
+            } else {
 
-    });
+                showMoreButton.innerHTML =
+                    '↓ <span>See Other Photos</span>';
 
-});
-</script>
-    <!-- FLOATING BUTTERFLIES -->
+            }
 
-<!-- MAGICAL FLOATING BUTTERFLIES -->
+        });
 
-<div class="butterfly butterfly-one">
-    <svg class="butterfly-svg" viewBox="0 0 100 100">
-        <g class="butterfly-wing-left">
-            <path class="butterfly-upper"
-                d="M50 48 C38 12 8 8 10 35 C11 48 31 54 50 52 Z"/>
-            <path class="butterfly-lower"
-                d="M49 52 C24 48 15 67 27 80 C38 88 47 67 50 55 Z"/>
-        </g>
-        <g class="butterfly-wing-right">
-            <path class="butterfly-upper"
-                d="M50 48 C62 12 92 8 90 35 C89 48 69 54 50 52 Z"/>
-            <path class="butterfly-lower"
-                d="M51 52 C76 48 85 67 73 80 C62 88 53 67 50 55 Z"/>
-        </g>
-        <path class="butterfly-body"
-            d="M48 35 Q50 30 52 35 L53 68 Q50 76 47 68 Z"/>
-        <path d="M49 35 Q40 20 36 24 M51 35 Q60 20 64 24"
-            fill="none" stroke="#b99aba" stroke-width="1.5"
-            stroke-linecap="round"/>
-    </svg>
-</div>
+        /* WISH SUBMISSION */
 
-<div class="butterfly butterfly-two">
-    <svg class="butterfly-svg" viewBox="0 0 100 100">
-        <g class="butterfly-wing-left">
-            <path class="butterfly-upper"
-                d="M50 48 C38 12 8 8 10 35 C11 48 31 54 50 52 Z"/>
-            <path class="butterfly-lower"
-                d="M49 52 C24 48 15 67 27 80 C38 88 47 67 50 55 Z"/>
-        </g>
-        <g class="butterfly-wing-right">
-            <path class="butterfly-upper"
-                d="M50 48 C62 12 92 8 90 35 C89 48 69 54 50 52 Z"/>
-            <path class="butterfly-lower"
-                d="M51 52 C76 48 85 67 73 80 C62 88 53 67 50 55 Z"/>
-        </g>
-        <path class="butterfly-body"
-            d="M48 35 Q50 30 52 35 L53 68 Q50 76 47 68 Z"/>
-        <path d="M49 35 Q40 20 36 24 M51 35 Q60 20 64 24"
-            fill="none" stroke="#b99aba" stroke-width="1.5"
-            stroke-linecap="round"/>
-    </svg>
-</div>
+        const wishForm =
+            document.getElementById("wishForm");
 
-<div class="butterfly butterfly-three">
-    <svg class="butterfly-svg" viewBox="0 0 100 100">
-        <g class="butterfly-wing-left">
-            <path class="butterfly-upper"
-                d="M50 48 C38 12 8 8 10 35 C11 48 31 54 50 52 Z"/>
-            <path class="butterfly-lower"
-                d="M49 52 C24 48 15 67 27 80 C38 88 47 67 50 55 Z"/>
-        </g>
-        <g class="butterfly-wing-right">
-            <path class="butterfly-upper"
-                d="M50 48 C62 12 92 8 90 35 C89 48 69 54 50 52 Z"/>
-            <path class="butterfly-lower"
-                d="M51 52 C76 48 85 67 73 80 C62 88 53 67 50 55 Z"/>
-        </g>
-        <path class="butterfly-body"
-            d="M48 35 Q50 30 52 35 L53 68 Q50 76 47 68 Z"/>
-        <path d="M49 35 Q40 20 36 24 M51 35 Q60 20 64 24"
-            fill="none" stroke="#b99aba" stroke-width="1.5"
-            stroke-linecap="round"/>
-    </svg>
-</div>
+        const wishName =
+            document.getElementById("wishName");
 
+        const anonymousWish =
+            document.getElementById("anonymousWish");
 
-<!-- LITTLE SPARKLES -->
-<div class="glitter glitter-one">✧</div>
-<div class="glitter glitter-two">✦</div>
-<div class="glitter glitter-three">✧</div>
+        const wishMessage =
+            document.getElementById("wishMessage");
+
+        const wishSubmitButton =
+            document.getElementById("wishSubmitButton");
+
+        const wishStatus =
+            document.getElementById("wishStatus");
+
+        wishForm.addEventListener(
+            "submit",
+            async event => {
+
+                event.preventDefault();
+
+                wishSubmitButton.disabled = true;
+
+                wishStatus.textContent =
+                    "Sending your wish...";
+
+                const name =
+                    anonymousWish.checked
+                        ? "Anonymous"
+                        : wishName.value.trim();
+
+                const message =
+                    wishMessage.value.trim();
+
+                const { error } =
+                    await supabaseClient
+                        .from("wishes")
+                        .insert([
+                            {
+                                name: name || "Anonymous",
+                                message: message
+                            }
+                        ]);
+
+                if (error) {
+
+                    console.error(error);
+
+                    wishStatus.textContent =
+                        "Something went wrong. Please try again.";
+
+                    wishSubmitButton.disabled = false;
+
+                    return;
+                }
+
+                wishStatus.textContent =
+                    "Your wish has been sent 🤍";
+
+                wishForm.reset();
+
+                wishSubmitButton.disabled = false;
+
+                await loadWishes();
+
+            }
+        );
+
+        /* DISPLAY WISHES */
+
+        const wishCardContainer =
+            document.getElementById("wishCardContainer");
+
+        const wishDots =
+            document.getElementById("wishDots");
+
+        let wishes = [];
+        let currentWishIndex = 0;
+        let wishAutoSlide;
+
+        async function loadWishes() {
+
+            const { data, error } =
+                await supabaseClient
+                    .from("wishes")
+                    .select("*")
+                    .order("created_at", {
+                        ascending: true
+                    });
+
+            if (error) {
+
+                console.error(error);
+
+                wishCardContainer.innerHTML = `
+                    <div class="wish-card">
+                        <p class="wish-card-message">
+                            Unable to load wishes 🤍
+                        </p>
+                    </div>
+                `;
+
+                return;
+            }
+
+            if (!data || !data.length) {
+
+                wishCardContainer.innerHTML = `
+                    <div class="wish-card">
+                        <p class="wish-card-message">
+                            Be the first to leave a little wish 🤍
+                        </p>
+                    </div>
+                `;
+
+                wishDots.innerHTML = "";
+
+                return;
+            }
+
+            wishes = data;
+
+            wishCardContainer.innerHTML = "";
+            wishDots.innerHTML = "";
+
+            wishes.forEach((wish, index) => {
+
+                const card =
+                    document.createElement("div");
+
+                card.className = "wish-card";
+
+                const messageElement =
+                    document.createElement("p");
+
+                messageElement.className =
+                    "wish-card-message";
+
+                messageElement.textContent =
+                    wish.message || "";
+
+                const nameElement =
+                    document.createElement("p");
+
+                nameElement.className =
+                    "wish-card-name";
+
+                nameElement.textContent =
+                    "— " + (wish.name || "Anonymous");
+
+                card.appendChild(messageElement);
+                card.appendChild(nameElement);
+
+                wishCardContainer.appendChild(card);
+
+                const dot =
+                    document.createElement("span");
+
+                dot.className = "wish-dot";
+
+                dot.addEventListener("click", () => {
+
+                    showWish(index);
+                    restartWishAutoSlide();
+
+                });
+
+                wishDots.appendChild(dot);
+
+            });
+
+            showWish(0);
+            startWishAutoSlide();
+
+        }
+
+        function showWish(index) {
+
+            if (!wishes.length) return;
+
+            if (index < 0) {
+                index = wishes.length - 1;
+            }
+
+            if (index >= wishes.length) {
+                index = 0;
+            }
+
+            currentWishIndex = index;
+
+            const cards =
+                wishCardContainer.querySelectorAll(".wish-card");
+
+            const dots =
+                wishDots.querySelectorAll(".wish-dot");
+
+            cards.forEach((card, cardIndex) => {
+
+                card.style.display =
+                    cardIndex === currentWishIndex
+                        ? "flex"
+                        : "none";
+
+            });
+
+            dots.forEach((dot, dotIndex) => {
+
+                dot.classList.toggle(
+                    "active",
+                    dotIndex === currentWishIndex
+                );
+
+            });
+
+        }
+
+        function startWishAutoSlide() {
+
+            clearInterval(wishAutoSlide);
+
+            wishAutoSlide = setInterval(() => {
+
+                showWish(currentWishIndex + 1);
+
+            }, 5500);
+
+        }
+
+        function restartWishAutoSlide() {
+            startWishAutoSlide();
+        }
+
+        /* WISH SWIPE */
+
+        let wishTouchStartX = 0;
+        let wishTouchEndX = 0;
+
+        wishCardContainer.addEventListener(
+            "touchstart",
+            event => {
+
+                wishTouchStartX =
+                    event.changedTouches[0].screenX;
+
+            },
+            { passive: true }
+        );
+
+        wishCardContainer.addEventListener(
+            "touchend",
+            event => {
+
+                wishTouchEndX =
+                    event.changedTouches[0].screenX;
+
+                const swipeDistance =
+                    wishTouchEndX - wishTouchStartX;
+
+                if (Math.abs(swipeDistance) < 50) {
+                    return;
+                }
+
+                if (swipeDistance < 0) {
+
+                    showWish(currentWishIndex + 1);
+
+                } else {
+
+                    showWish(currentWishIndex - 1);
+
+                }
+
+                restartWishAutoSlide();
+
+            },
+            { passive: true }
+        );
+
+        /* BUTTERFLY INTERACTION */
+
+        document.querySelectorAll(".butterfly").forEach(butterfly => {
+
+            butterfly.addEventListener("click", () => {
+
+                if (butterfly.dataset.flying === "true") {
+                    return;
+                }
+
+                butterfly.dataset.flying = "true";
+
+                butterfly.style.animation = "none";
+                butterfly.style.opacity = "1";
+
+                butterfly.animate(
+                    [
+                        {
+                            transform: "translate(0, 0) rotate(0deg) scale(1)",
+                            opacity: 1
+                        },
+                        {
+                            transform: "translate(35px, -70px) rotate(25deg) scale(1.1)",
+                            opacity: 1,
+                            offset: 0.4
+                        },
+                        {
+                            transform: "translate(100px, -180px) rotate(65deg) scale(0.3)",
+                            opacity: 0
+                        }
+                    ],
+                    {
+                        duration: 800,
+                        easing: "ease-in",
+                        fill: "forwards"
+                    }
+                );
+
+                setTimeout(() => {
+
+                    butterfly.getAnimations().forEach(animation => {
+                        animation.cancel();
+                    });
+
+                    butterfly.style.animation = "";
+                    butterfly.style.opacity = "";
+                    butterfly.style.transform = "";
+
+                    delete butterfly.dataset.flying;
+
+                }, 3000);
+
+            });
+
+        });
+
+        /* INITIAL LOAD */
+
+        loadGallery();
+        loadWishes();
+
+    </script>
+
+    <!-- WEDDING INTRO ANIMATION -->
+
+    <script>
+        const introScreen =
+            document.getElementById("introScreen");
+
+        const enterWeddingButton =
+            document.getElementById("enterWeddingButton");
+
+        window.addEventListener("load", () => {
+
+            setTimeout(() => {
+
+                introScreen.classList.add("open");
+
+            }, 500);
+
+        });
+
+        enterWeddingButton.addEventListener("click", async () => {
+
+            introScreen.style.transition = "opacity 1s ease";
+            introScreen.style.opacity = "0";
+
+            document.body.classList.remove("intro-active");
+
+            if (typeof playWeddingMusic === "function") {
+                await playWeddingMusic();
+            }
+
+            setTimeout(() => {
+
+                introScreen.style.display = "none";
+
+            }, 1000);
+
+        });
+    </script>
+
 </body>
-
 </html>
