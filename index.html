@@ -483,7 +483,8 @@ button:hover {
     z-index: 5;
     width: 38px;
     height: 38px;
-    pointer-events: none;
+    pointer-events: auto;
+cursor: pointer;
     opacity: 0;
     filter:
         drop-shadow(0 0 5px rgba(255, 220, 240, 0.9))
@@ -561,6 +562,33 @@ button:hover {
 @keyframes flapRight {
     from { transform: scaleX(1); }
     to { transform: scaleX(0.45); }
+}
+        /* BUTTERFLY FLY-AWAY INTERACTION */
+
+.butterfly {
+    cursor: pointer;
+}
+
+.butterfly.fly-away {
+    animation: butterflyFlyAway 0.8s ease-in forwards !important;
+    pointer-events: none;
+}
+
+@keyframes butterflyFlyAway {
+    0% {
+        transform: translate(0, 0) rotate(0deg) scale(1);
+        opacity: 0.9;
+    }
+
+    40% {
+        transform: translate(35px, -70px) rotate(25deg) scale(1.1);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translate(100px, -180px) rotate(65deg) scale(0.3);
+        opacity: 0;
+    }
 }
 
 .butterfly-svg {
@@ -1845,6 +1873,26 @@ wishCardContainer.addEventListener(
 
 
 loadWishes();
+
+/* BUTTERFLY INTERACTION */
+
+document.querySelectorAll(".butterfly").forEach(butterfly => {
+
+    butterfly.addEventListener("click", () => {
+
+        if (butterfly.classList.contains("fly-away")) {
+            return;
+        }
+
+        butterfly.classList.add("fly-away");
+
+        setTimeout(() => {
+            butterfly.classList.remove("fly-away");
+        }, 3000);
+
+    });
+
+});
 </script>
     <!-- FLOATING BUTTERFLIES -->
 
