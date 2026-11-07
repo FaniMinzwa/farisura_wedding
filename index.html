@@ -569,28 +569,6 @@ cursor: pointer;
     cursor: pointer;
 }
 
-.butterfly.fly-away {
-    animation: butterflyFlyAway 0.8s ease-in forwards !important;
-    pointer-events: none;
-}
-
-@keyframes butterflyFlyAway {
-    0% {
-        transform: translate(0, 0) rotate(0deg) scale(1);
-        opacity: 0.9;
-    }
-
-    40% {
-        transform: translate(35px, -70px) rotate(25deg) scale(1.1);
-        opacity: 1;
-    }
-
-    100% {
-        transform: translate(100px, -180px) rotate(65deg) scale(0.3);
-        opacity: 0;
-    }
-}
-
 .butterfly-svg {
     width: 100%;
     height: 100%;
@@ -1880,14 +1858,50 @@ document.querySelectorAll(".butterfly").forEach(butterfly => {
 
     butterfly.addEventListener("click", () => {
 
-        if (butterfly.classList.contains("fly-away")) {
+        if (butterfly.dataset.flying === "true") {
             return;
         }
 
-        butterfly.classList.add("fly-away");
+        butterfly.dataset.flying = "true";
+
+        butterfly.style.animation = "none";
+        butterfly.style.opacity = "1";
+
+        butterfly.animate(
+            [
+                {
+                    transform: "translate(0, 0) rotate(0deg) scale(1)",
+                    opacity: 1
+                },
+                {
+                    transform: "translate(35px, -70px) rotate(25deg) scale(1.1)",
+                    opacity: 1,
+                    offset: 0.4
+                },
+                {
+                    transform: "translate(100px, -180px) rotate(65deg) scale(0.3)",
+                    opacity: 0
+                }
+            ],
+            {
+                duration: 800,
+                easing: "ease-in",
+                fill: "forwards"
+            }
+        );
 
         setTimeout(() => {
-            butterfly.classList.remove("fly-away");
+
+            butterfly.getAnimations().forEach(animation => {
+                animation.cancel();
+            });
+
+            butterfly.style.animation = "";
+            butterfly.style.opacity = "";
+            butterfly.style.transform = "";
+
+            delete butterfly.dataset.flying;
+
         }, 3000);
 
     });
